@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
+<title>COVID-19 statistics by US state - Witulski</title>
 <style> /* set the CSS */
 
 body { font: 12px Arial;}
@@ -18,6 +19,12 @@ path {
     shape-rendering: crispEdges;
 }
 
+.legend {
+  font-size: 16px;
+  font-weight: bold;
+  text-anchor: middle;
+}
+
 </style>
 <body>
 
@@ -30,8 +37,8 @@ path {
 <script>
 
 // Set the dimensions of the canvas / graph
-var margin = {top: 30, right: 20, bottom: 30, left: 50},
-    width = 800 - margin.left - margin.right,
+var margin = {top: 30, right: 20, bottom: 300, left: 50},
+    width = 600 - margin.left - margin.right,
     height = 600 - margin.top - margin.bottom;
 
 // Set the ranges
@@ -79,7 +86,7 @@ d3.csv("formattedCovidCases.csv")
 		x.domain([0, data[0].cases.length]);
 		y.domain([100, 100000]);
 
-		// Nest the entries by symbol
+	  // Nest the entries by symbol
 		var dataNest = d3.nest()
 			.key(function(d) {
 				return d.state;
@@ -89,30 +96,41 @@ d3.csv("formattedCovidCases.csv")
 		var color = d3.scale.category20();  // set the color scale
 
 		// Loop through each symbol / key
-		dataNest.forEach(function(d) {
+		dataNest.forEach(function(d, i) {
 
-//			console.log(d.values[0].cases)
-
-// sending just the list of numbers to the line()
-
+      // sending just the list of numbers to the line()
 			svg.append("path")
 				.attr("class", "line")
 				.style("stroke", function() {
 					return d.color = color(d.key);
 				})
 		    .attr("d", dataline(d.values[0].cases));
-			});
 
-			// Add the X Axis
-		  svg.append("g")
-		    .attr("class", "x axis")
-		    .attr("transform", "translate(0," + height + ")")
-		    .call(xAxis);
+      // Make space for the legend
+      // calculate individually based on i to place instead of working through this
+      legendWidthSpacing = width/4
 
-		  // Add the Y Axis
-		  svg.append("g")
-		    .attr("class", "y axis")
-		    .call(yAxis);
+      // Build legend
+      svg.append("text")
+        .attr("x", (legendWidthSpacing/2) + (i%4)*legendWidthSpacing)
+        .attr("y", height + 40 + (Math.floor(i/4) * 20))
+        .attr("class", "legend")
+        .style("fill", function() {return d.color = color(d.key); })
+        .text(d.key);
+		});
+
+
+
+		// Add the X Axis
+	  svg.append("g")
+	    .attr("class", "x axis")
+	    .attr("transform", "translate(0," + height + ")")
+	    .call(xAxis);
+
+	  // Add the Y Axis
+	  svg.append("g")
+	    .attr("class", "y axis")
+	    .call(yAxis);
 
 
 	});
