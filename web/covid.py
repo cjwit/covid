@@ -37,7 +37,7 @@ with open('covid.csv') as csvfile:
 
 with open('formattedCovidCases.csv', 'w') as newfile:
     writer = csv.writer(newfile)
-#    writer.writerow(createTitleRow())
+    writer.writerow(createTitleRow())
     for state in covid_cases:
         if len(covid_cases[state]) > 0:
             newrow = [state] + covid_cases[state]
@@ -45,7 +45,7 @@ with open('formattedCovidCases.csv', 'w') as newfile:
 
 with open('formattedCovidDeaths.csv', 'w') as newfile:
     writer = csv.writer(newfile)
-#    writer.writerow(createTitleRow())
+    writer.writerow(createTitleRow())
     for state in covid_deaths:
         if len(covid_deaths[state]) > 0:
             newrow = [state] + covid_deaths[state]

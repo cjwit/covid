@@ -21,7 +21,8 @@ path {
 </style>
 <body>
 
-COVID-19 statistics by US state
+
+<h1>COVID-19 statistics by US state</h1>
 
 <!-- load the d3.js library -->
 <script src="http://d3js.org/d3.v3.min.js"></script>
@@ -30,15 +31,13 @@ COVID-19 statistics by US state
 
 // Set the dimensions of the canvas / graph
 var margin = {top: 30, right: 20, bottom: 30, left: 50},
-    width = 600 - margin.left - margin.right,
-    height = 270 - margin.top - margin.bottom;
-
-// Parse the date / time
-var parseDate = d3.time.format("%b %Y").parse;
+    width = 800 - margin.left - margin.right,
+    height = 600 - margin.top - margin.bottom;
 
 // Set the ranges
-var x = d3.time.scale().range([0, width]);
-var y = d3.scale.linear().range([height, 0]);
+// Change Y to scale.linear() for linear scale
+var x = d3.scale.linear().range([0, width]);
+var y = d3.scale.log().range([height, 0]);
 
 // Define the axes
 var xAxis = d3.svg.axis().scale(x)
@@ -49,8 +48,8 @@ var yAxis = d3.svg.axis().scale(y)
 
 // Define the line
 var dataline = d3.svg.line()
-    .x(function(d) { return x(d.date); })
-    .y(function(d) { return y(d.cases); });
+    .x(function(d,i) { return x(i); })
+    .y(function(d) { return y(d); });
 
 // Adds the svg canvas
 var svg = d3.select("body")
@@ -62,44 +61,59 @@ var svg = d3.select("body")
               "translate(" + margin.left + "," + margin.top + ")");
 
 // Get the data
-d3.csv("formattedCovidCases.csv", function(error, data) {
-	console.log(data)
-	data.forEach(function(d) {
-		console.log(d)
-		d.state = d[0];
-		console.log(state)
-		d.cases = +d.cases;
+d3.csv("formattedCovidCases.csv")
+	.row(function(d) {
+		var cases = Object.keys(d).map(function(key) {
+			if (!isNaN(d[key])) {
+				return d[key];
+			}
+		})
+		return {state: d.state, cases: cases };
+	})
+	.get(function(error, data) {
+
+		// Scale the range of the data
+		x.domain([0, data[0].cases.length]);
+		y.domain([100, 75000]);
+
+		// Nest the entries by symbol
+		var dataNest = d3.nest()
+			.key(function(d) {
+				return d.state;
+			})
+			.entries(data);
+
+		var color = d3.scale.category20();  // set the color scale
+
+		// Loop through each symbol / key
+		dataNest.forEach(function(d) {
+
+//			console.log(d.values[0].cases)
+
+// sending just the list of numbers to the line()
+
+			svg.append("path")
+				.attr("class", "line")
+				.style("stroke", function() {
+					return d.color = color(d.key);
+				})
+		    .attr("d", dataline(d.values[0].cases));
+			});
+
+			// Add the X Axis
+		  svg.append("g")
+		    .attr("class", "x axis")
+		    .attr("transform", "translate(0," + height + ")")
+		    .call(xAxis);
+
+		  // Add the Y Axis
+		  svg.append("g")
+		    .attr("class", "y axis")
+		    .call(yAxis);
+
+
 	});
 
-	// Scale the range of the data
-	x.domain(d3.extent(data, function(d) { return d.date; }));
-	y.domain([0, d3.max(data, function(d) { return d.cases; })]);
-
-	// Nest the entries by symbol
-	var dataNest = d3.nest()
-		.key(function(d) {return d.state;})
-		.entries(data);
-
-	// Loop through each symbol / key
-	dataNest.forEach(function(d) {
-
-		svg.append("path")
-			.attr("class", "line")
-	    .attr("d", dataline(d.values));
-		});
-
-	  // Add the X Axis
-	  svg.append("g")
-	    .attr("class", "x axis")
-	    .attr("transform", "translate(0," + height + ")")
-	    .call(xAxis);
-
-	  // Add the Y Axis
-	  svg.append("g")
-	    .attr("class", "y axis")
-	    .call(yAxis);
-
-});
 
 </script>
 </body>
