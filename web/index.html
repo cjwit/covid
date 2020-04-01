@@ -43,8 +43,11 @@ var y = d3.scale.log().range([height, 0]);
 var xAxis = d3.svg.axis().scale(x)
     .orient("bottom").ticks(5);
 
-var yAxis = d3.svg.axis().scale(y)
-    .orient("left").ticks(5);
+var yAxis = d3.svg.axis()
+	.scale(y)
+	.orient("left")
+	.tickFormat(function(d) {return y.tickFormat(10,d3.format(",d"))(d)})
+	.ticks(5);
 
 // Define the line
 var dataline = d3.svg.line()
@@ -74,7 +77,7 @@ d3.csv("formattedCovidCases.csv")
 
 		// Scale the range of the data
 		x.domain([0, data[0].cases.length]);
-		y.domain([100, 75000]);
+		y.domain([100, 100000]);
 
 		// Nest the entries by symbol
 		var dataNest = d3.nest()
