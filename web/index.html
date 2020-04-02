@@ -105,11 +105,13 @@ d3.csv("formattedCovidCases.csv")
 					return d.color = color(d.key);
 				})
         .attr("id", 'tag'+d.key.replace(/\s+/g, ''))
+        .style('opacity', 0.1)
 		    .attr("d", dataline(d.values[0].cases));
 
       // Make space for the legend
       // calculate individually based on i to place instead of working through this
       legendWidthSpacing = width/4
+      d.active = false
 
       // Build legend
       svg.append("text")
@@ -118,13 +120,13 @@ d3.csv("formattedCovidCases.csv")
         .attr("class", "legend")
         .style("fill", function() {return d.color = color(d.key); })
         .on("click", function () {
-          // is there a d.active value?
-          var active = d.active ? false : true;
-          var newOpacity = active ? 0.1 : 1;
+          var newOpacity = d.active ? 0.1 : 1;
+          var newStrokeWidth = d.active ? 2 : 4;
           d3.select("#tag"+d.key.replace(/\s+/g, ''))
-            .transition().duration(100)
-            .style('opacity', newOpacity);
-          d.active = active;
+            .transition().duration(200)
+            .style('opacity', newOpacity)
+            .style('stroke-width', newStrokeWidth);
+          d.active = !d.active
         })
         .text(d.key);
 		});
