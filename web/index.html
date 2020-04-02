@@ -14,7 +14,7 @@ path {
 .axis path,
 .axis line {
     fill: none;
-    stroke: grey;
+    stroke: lightgrey;
     stroke-width: 1;
     shape-rendering: crispEdges;
 }
@@ -30,6 +30,9 @@ path {
 
 
 <h1>COVID-19 statistics by US state</h1>
+<h2>Based on NYTimes data, by Christopher Witulski</h2>
+<p>Last updated on April 1st</p>
+
 
 <!-- load the d3.js library -->
 <script src="http://d3js.org/d3.v3.min.js"></script>
@@ -47,12 +50,15 @@ var x = d3.scale.linear().range([0, width]);
 var y = d3.scale.log().range([height, 0]);
 
 // Define the axes
-var xAxis = d3.svg.axis().scale(x)
-    .orient("bottom").ticks(5);
+var xAxis = d3.svg.axis()
+  .scale(x)
+  .orient("bottom")
+  .ticks(5);
 
 var yAxis = d3.svg.axis()
 	.scale(y)
 	.orient("left")
+  .tickSize(-width, 0, 0)
 	.tickFormat(function(d) {return y.tickFormat(5,d3.format(",d"))(d)})
 	.ticks(5);
 
@@ -131,8 +137,6 @@ d3.csv("formattedCovidCases.csv")
         .text(d.key);
 		});
 
-
-
 		// Add the X Axis
 	  svg.append("g")
 	    .attr("class", "x axis")
@@ -142,11 +146,16 @@ d3.csv("formattedCovidCases.csv")
 	  // Add the Y Axis
 	  svg.append("g")
 	    .attr("class", "y axis")
-	    .call(yAxis);
-
-
+	    .call(yAxis)
 	});
 
-
 </script>
+
+<p>
+  This chart tracks cases of COVID-19 across the USA from the date when each state first had at least 100 reported cases. The data comes from the New York Times (see <a href = 'https://www.nytimes.com/article/coronavirus-county-data-us.html?action=click&module=Spotlight&pgtype=Homepage'>here for more information</a> and <a href = 'https://github.com/nytimes/covid-19-data'>here for the GitHub data</a>). The idea for the chart comes from <a href = "https://ourworldindata.org/grapher/covid-confirmed-cases-since-100th-case">this similar one from Our World in Data</a>.
+</p>
+<p>
+  I wouldn't depend on this for much, it's mostly a chance for me (Christopher Witulski) to see a graph that I wish were easier to find while checking to see if I remember how to use D3.js.
+</p>
+
 </body>

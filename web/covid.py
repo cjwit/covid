@@ -21,12 +21,15 @@ def addDeaths(row):
     if deaths > 9:
         covid_deaths[state].append(deaths)
 
-def createTitleRow():
+def createTitleRow(data):
     long = 0
-    for state in covid_cases:
+    for state in data:
         if len(state) > long:
             long = len(state)
     return(["state"] + range(0,long))
+
+def sortData(data):
+    return sorted(data)
 
 with open('covid.csv') as csvfile:
     readCSV = csv.reader(csvfile, delimiter=',')
@@ -37,16 +40,16 @@ with open('covid.csv') as csvfile:
 
 with open('formattedCovidCases.csv', 'w') as newfile:
     writer = csv.writer(newfile)
-    writer.writerow(createTitleRow())
-    for state in covid_cases:
+    writer.writerow(createTitleRow(covid_cases))
+    for state in sortData(covid_cases):
         if len(covid_cases[state]) > 0:
             newrow = [state] + covid_cases[state]
             writer.writerow(newrow)
 
 with open('formattedCovidDeaths.csv', 'w') as newfile:
     writer = csv.writer(newfile)
-    writer.writerow(createTitleRow())
-    for state in covid_deaths:
+    writer.writerow(createTitleRow(covid_deaths))
+    for state in sortData(covid_deaths):
         if len(covid_deaths[state]) > 0:
             newrow = [state] + covid_deaths[state]
             writer.writerow(newrow)
