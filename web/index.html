@@ -104,6 +104,7 @@ d3.csv("formattedCovidCases.csv")
 				.style("stroke", function() {
 					return d.color = color(d.key);
 				})
+        .attr("id", 'tag'+d.key.replace(/\s+/g, ''))
 		    .attr("d", dataline(d.values[0].cases));
 
       // Make space for the legend
@@ -116,6 +117,15 @@ d3.csv("formattedCovidCases.csv")
         .attr("y", height + 40 + (Math.floor(i/4) * 20))
         .attr("class", "legend")
         .style("fill", function() {return d.color = color(d.key); })
+        .on("click", function () {
+          // is there a d.active value?
+          var active = d.active ? false : true;
+          var newOpacity = active ? 0.1 : 1;
+          d3.select("#tag"+d.key.replace(/\s+/g, ''))
+            .transition().duration(100)
+            .style('opacity', newOpacity);
+          d.active = active;
+        })
         .text(d.key);
 		});
 
