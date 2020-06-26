@@ -1,0 +1,10 @@
+osascript -e 'tell app "Terminal"
+    do script "cd /Users/cwituls/Documents/covid"
+end tell'
+osascript -e 'tell app "Terminal"
+    do script "cd /Users/cwituls/Documents/covid && python -m SimpleHTTPServer"
+end tell'
+curl "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv" -o "/Users/cwituls/Documents/covid/covid.csv"
+cd /Users/cwituls/Documents/covid && python covid.py
+/usr/bin/open -a "/Applications/Firefox.app/Contents/MacOS/firefox" 'http://localhost:8000/'
+code /Users/cwituls/Documents/covid

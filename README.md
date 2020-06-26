@@ -6,6 +6,6 @@ I wouldn't depend on this for much, it's mostly a chance for me (Christopher Wit
 
 ## Next
 
-* Add hover for data
-* Automate Y scale change from log to linear
+* Fix issue in python code that creates the wrong length title line 
+* Check for hover issues
 * Add doubling time lines

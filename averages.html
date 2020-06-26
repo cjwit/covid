@@ -55,8 +55,8 @@ path {
 <body>
 
 <center>
-  <h1>COVID-19 statistics by US states since their 100th reported case</h1>
-  <p><a href="deaths.html">See deaths</a> | <a href="averages.html">See seven day averages</a> | <a href="scaled_averages.html">See seven day averages scaled by population</a></p>
+  <h1>COVID-19 seven day averages of new cases by US states</h1>
+  <p><a href="index.html">See cases</a> | <a href="deaths.html">See deaths</a> | <a href="scaled_averages.html">See seven day averages scaled by population</a></p>
   <p>Click state names to show their graphs | Developed by <a href="http://cjwit.github.io">Christopher Witulski</a> | Last updated on <span id="date">June 26, 2020</span></p>
 </center>
 
@@ -73,7 +73,7 @@ var margin = {top: 30, right: 100, bottom: 320, left: 100},
 // Set the ranges
 // Change Y to scale.linear() for linear scale
 var x = d3.scale.linear().range([0, width]);
-var y = d3.scale.log().range([height, 0]);
+var y = d3.scale.linear().range([height, 0]);
 
 // Define the axes
 var xAxis = d3.svg.axis()
@@ -108,7 +108,7 @@ var tooltip = d3.select("body")
         .style("opacity", 0);
 
 // Get the data
-d3.csv("formattedCovidCases.csv")
+d3.csv("formattedCovidAverages.csv")
 	.row(function(d) {
 		var cases = Object.keys(d).map(function(key) {
 			if (!isNaN(d[key])) {
@@ -120,8 +120,19 @@ d3.csv("formattedCovidCases.csv")
 	.get(function(error, data) {
 
 		// Scale the range of the data
+        // FIXME: get max value, not registering if statement
 		x.domain([0, data[0].cases.length]);
-		y.domain([100, 1000000]);
+		y.domain([0, d3.max(data, function(d) { 
+            // var maxCases = 0;
+            // for (var i = 0; i < d.cases.length - 1; i++) {
+            //     if (d.cases[i] > maxCases) {
+            //         maxCases = d.cases[i];
+            //         // console.log(d.state, d.cases[i], maxCases);
+            //     }
+            // }
+            // console.log(maxCases);
+            return 10000; 
+            })]);
 
 	  // Nest the entries by symbol
 		var dataNest = d3.nest()
@@ -145,7 +156,7 @@ d3.csv("formattedCovidCases.csv")
       .attr('x', 10)
       .attr('y', -10)
       .attr('class', 'title')
-      .text('Cases, from 100th reported')
+      .text('Seven day rolling average')
 
 		var color = d3.scale.category10();  // set the color scale
 
@@ -182,13 +193,14 @@ d3.csv("formattedCovidCases.csv")
 
           tooltip.html(function() {
             var casesArray = d.values[0].cases;
-            var lastcase = 0;
+            var maxcases = 0;
             for (i = 0; i < casesArray.length; i++) {
-              if (Number(casesArray[i]) > lastcase) {
-                lastcase = Number(casesArray[i])
+              if (Number(casesArray[i]) > maxcases) {
+                maxcases = Number(casesArray[i])
               }
             }
-            return d.key + ": " + lastcase + " total cases";
+            // FIXME: why is the last case undefined?
+            return d.key + ", max: " + Math.round(maxcases) + ", current: " + Math.round(Number(casesArray[casesArray.length - 2]));
           })
             .style('left', (d3.event.pageX - 50) + 'px')
             .style('top', (d3.event.pageY - 80) + "px");
@@ -257,12 +269,11 @@ d3.csv("formattedCovidCases.csv")
 </script>
 
 <p>
-  This chart tracks cases of COVID-19 across the USA from the date when each state first had at least 100 reported cases. The data comes from the New York Times (see <a href = 'https://www.nytimes.com/article/coronavirus-county-data-us.html?action=click&module=Spotlight&pgtype=Homepage'>here for more information</a> and <a href = 'https://github.com/nytimes/covid-19-data'>here for the GitHub data</a>). The idea for the chart comes from <a href = "https://ourworldindata.org/grapher/covid-confirmed-cases-since-100th-case">this similar one from Our World in Data</a>.
+  This chart tracks the seven day average of cases of COVID-19 across the USA. The data comes from the New York Times (see <a href = 'https://www.nytimes.com/article/coronavirus-county-data-us.html?action=click&module=Spotlight&pgtype=Homepage'>here for more information</a> and <a href = 'https://github.com/nytimes/covid-19-data'>here for the GitHub data</a>). The idea for the chart comes from <a href = "https://ourworldindata.org/grapher/covid-confirmed-cases-since-100th-case">this similar one from Our World in Data</a>.
 </p>
 <p>
   I wouldn't depend on this for much, it's mostly a chance for me to see a graph that I wish were easier to find while checking to see if I remember how to use D3.js.
 </p>
-
 <script data-goatcounter="https://witulski.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
 </body>

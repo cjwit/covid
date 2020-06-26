@@ -55,10 +55,11 @@ path {
 <body>
 
 <center>
-  <h1>COVID-19 statistics by US states since their 100th reported case</h1>
-  <p><a href="deaths.html">See deaths</a> | <a href="averages.html">See seven day averages</a> | <a href="scaled_averages.html">See seven day averages scaled by population</a></p>
-  <p>Click state names to show their graphs | Developed by <a href="http://cjwit.github.io">Christopher Witulski</a> | Last updated on <span id="date">June 26, 2020</span></p>
+  <h1>COVID-19 statistics by US states since their 10th reported death</h1>
+  <p><a href="index.html">See cases</a> | <a href="averages.html">See seven day averages</a> | <a href="scaled_averages.html">See seven day averages scaled by population</p>
+  <p>Click state names to show their graphs | Developed by <a href="http://cjwit.github.io">Christopher Witulski</a> | Last updated on June 13, 2020</p>
 </center>
+
 
 <!-- load the d3.js library -->
 <script src="src/d3.min.js"></script>
@@ -107,8 +108,9 @@ var tooltip = d3.select("body")
         .attr("class", "tooltip")
         .style("opacity", 0);
 
+
 // Get the data
-d3.csv("formattedCovidCases.csv")
+d3.csv("formattedCovidDeaths.csv")
 	.row(function(d) {
 		var cases = Object.keys(d).map(function(key) {
 			if (!isNaN(d[key])) {
@@ -121,7 +123,7 @@ d3.csv("formattedCovidCases.csv")
 
 		// Scale the range of the data
 		x.domain([0, data[0].cases.length]);
-		y.domain([100, 1000000]);
+		y.domain([10, 100000]);
 
 	  // Nest the entries by symbol
 		var dataNest = d3.nest()
@@ -131,21 +133,21 @@ d3.csv("formattedCovidCases.csv")
 			.entries(data);
 
     // Add the X Axis
-    svg.append("g")
-      .attr("class", "x axis")
-      .attr("transform", "translate(0," + height + ")")
-      .call(xAxis);
+	  svg.append("g")
+	    .attr("class", "x axis")
+	    .attr("transform", "translate(0," + height + ")")
+	    .call(xAxis);
 
-    // Add the Y Axis
-    svg.append("g")
-      .attr("class", "y axis")
-      .call(yAxis)
+	  // Add the Y Axis
+	  svg.append("g")
+	    .attr("class", "y axis")
+	    .call(yAxis)
 
     svg.append('text')
       .attr('x', 10)
       .attr('y', -10)
       .attr('class', 'title')
-      .text('Cases, from 100th reported')
+      .text('Deaths, from 10th reported')
 
 		var color = d3.scale.category10();  // set the color scale
 
@@ -188,10 +190,11 @@ d3.csv("formattedCovidCases.csv")
                 lastcase = Number(casesArray[i])
               }
             }
-            return d.key + ": " + lastcase + " total cases";
+            return d.key + ": " + lastcase + " total deaths";
           })
             .style('left', (d3.event.pageX - 50) + 'px')
             .style('top', (d3.event.pageY - 80) + "px");
+
         })
         .on("mouseout", function() {
           tooltip.transition()
@@ -216,8 +219,8 @@ d3.csv("formattedCovidCases.csv")
 
       // Build legend
       svg.append("text")
-        .attr("x", (legendWidthSpacing/2 + Math.floor(i/14) * legendWidthSpacing))
-        .attr("y", height + 40 + (i%14 * 20))
+        .attr("x", (legendWidthSpacing/2 + Math.floor(i/13) * legendWidthSpacing))
+        .attr("y", height + 40 + (i%13 * 20))
         .attr("class", "legend")
         .attr("id", 'label'+d.key.replace(/\s+/g, ''))
         .style("fill", function() {return d.color = color(d.key); })
@@ -238,7 +241,7 @@ d3.csv("formattedCovidCases.csv")
             }
         })
         .on("click", function () {
-          var newOpacity = d.active ? 0.4 : 1;
+          var newOpacity = d.active ? 0.1 : 1;
           var newStrokeWidth = d.active ? 2 : 4;
           d3.select("#label"+d.key.replace(/\s+/g, ''))
             .transition().duration(200)
@@ -257,12 +260,11 @@ d3.csv("formattedCovidCases.csv")
 </script>
 
 <p>
-  This chart tracks cases of COVID-19 across the USA from the date when each state first had at least 100 reported cases. The data comes from the New York Times (see <a href = 'https://www.nytimes.com/article/coronavirus-county-data-us.html?action=click&module=Spotlight&pgtype=Homepage'>here for more information</a> and <a href = 'https://github.com/nytimes/covid-19-data'>here for the GitHub data</a>). The idea for the chart comes from <a href = "https://ourworldindata.org/grapher/covid-confirmed-cases-since-100th-case">this similar one from Our World in Data</a>.
+  This chart tracks deaths from COVID-19 across the USA from the date when each state first had at least 10 reported. The data comes from the New York Times (see <a href = 'https://www.nytimes.com/article/coronavirus-county-data-us.html?action=click&module=Spotlight&pgtype=Homepage'>here for more information</a> and <a href = 'https://github.com/nytimes/covid-19-data'>here for the GitHub data</a>). The idea for the chart comes from <a href = "https://ourworldindata.org/grapher/covid-confirmed-cases-since-100th-case">this similar one from Our World in Data</a>.
 </p>
 <p>
   I wouldn't depend on this for much, it's mostly a chance for me to see a graph that I wish were easier to find while checking to see if I remember how to use D3.js.
 </p>
-
 <script data-goatcounter="https://witulski.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
 </body>
