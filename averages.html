@@ -72,7 +72,7 @@ var margin = {top: 30, right: 50, bottom: 320, left: 50},
 
 // Set the ranges
 // Change Y to scale.linear() for linear scale
-var x = d3.scale.linear().range([0, width]);
+var x = d3.time.scale().range([0, width]);
 var y = d3.scale.linear().range([height, 0]);
 
 // Define the axes
@@ -90,8 +90,8 @@ var yAxis = d3.svg.axis()
 
 // Define the line
 var dataline = d3.svg.line()
-    .x(function(d,i) { return x(i); })
-    .y(function(d) { return y(d); });
+  .x(function(d) { return x(d.date); })
+  .y(function(d) { return y(d.cases); });
 
 // Adds the svg canvas
 var svg = d3.select("body")
@@ -120,9 +120,11 @@ d3.csv("formattedCovidAverages.csv")
 	.get(function(error, data) {
 
 		// Scale the range of the data
-        // FIXME: get max value, not registering if statement
-		x.domain([0, data[0].cases.length]);
+		var dayOne = new Date(2020,0,21);
+    var yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
+		x.domain([dayOne, yesterday]);
 		y.domain([0, d3.max(data, function(d) { 
+        // FIXME: get max value, not registering if statement
             // var maxCases = 0;
             // for (var i = 0; i < d.cases.length - 1; i++) {
             //     if (d.cases[i] > maxCases) {
@@ -163,7 +165,14 @@ d3.csv("formattedCovidAverages.csv")
 		// Loop through each symbol / key
 		dataNest.forEach(function(d, i) {
 
-      // sending just the list of numbers to the line()
+      // reformat the list to add date objects
+      var dataList = [];
+      // length - 1 removes the last undefined entry
+      for (var day = 0; day < d.values[0].cases.length - 1; day++) {
+        let currentDay = new Date(dayOne.valueOf() + day * 24 * 60 * 60 * 1000);
+        dataList.push({ "date": currentDay, "cases": d.values[0].cases[day]});
+      };
+
 			svg.append("path")
 				.attr("class", "line")
 				.style("stroke", function() {
@@ -171,7 +180,7 @@ d3.csv("formattedCovidAverages.csv")
 				})
         .attr("id", 'tag'+d.key.replace(/\s+/g, ''))
         .style('opacity', 0.4)
-		    .attr("d", dataline(d.values[0].cases))
+		    .attr("d", dataline(dataList))
         .on("mouseover", function() {
 
           // color label on mouseover

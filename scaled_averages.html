@@ -90,8 +90,8 @@ var yAxis = d3.svg.axis()
 
 // Define the line
 var dataline = d3.svg.line()
-    .x(function(d) { return x(d.date); })
-    .y(function(d) { return y(d.cases); });
+  .x(function(d) { return x(d.date); })
+  .y(function(d) { return y(d.cases); });
 
 // Adds the svg canvas
 var svg = d3.select("body")
@@ -121,7 +121,6 @@ d3.csv("formattedCovidScaledAverages.csv")
 
 		// Scale the range of the data
     var dayOne = new Date(2020,0,21);
-    console.log(dayOne);
     var yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
 		x.domain([dayOne, yesterday]);
 		y.domain([0, d3.max(data, function(d) { 
