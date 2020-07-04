@@ -3,19 +3,10 @@ import json
 import re
 from datetime import date
 
-# incorporate
-covid_cases = {}
-covid_deaths = {}
-covid_averages = {}
-covid_scaled_averages = {}
-all_cases = {}
-
 # master data list
 data = {
     'states': {}
-    # max for each stat
 }
-
 
 def checkState(object, state):
     if state not in data['states']:
@@ -69,9 +60,14 @@ def getMax(state, statistic):
         if entry > max:
             max = entry
     name = 'max' + statistic[0].upper() + statistic[1:]
-    print (state, name, max)
     data['states'][state][name] = max
 
+def getMaxOverall(statistic):
+    max = 0
+    for state in data['states']:
+        if data['states'][state][statistic] > max:
+            max = data['states'][state][statistic]
+    data[statistic] = max
 
 # use population data to set up data object
 with open('population.json') as populationFile:
@@ -104,107 +100,56 @@ for state in sorted(data['states'].keys()):
     getMax(state, 'averages')
     getMax(state, 'scaledAverages')
 
-
+getMaxOverall('maxCases')
+getMaxOverall('maxDeaths')
+getMaxOverall('maxAverages')
+getMaxOverall('maxScaledAverages')
 
 # write object to file as JSON
 with open('data.json', 'w') as output:
     json.dump(data, output)
 
+#
+# set dates in html files
+#
 
-# # does not add zeros if there are no cases, dates will not align
+today = date.today()
+todayString = today.strftime("%B %d, %Y")
+searchTerm = "<span id=\"date\">.*<\/span>"
+newDateString = "<span id=\"date\">" + todayString + "</span>"
 
-# def createTitleRow(data):
-#     long = 0
-#     for state in sortData(data):
-#         if len(data[state]) > long:
-#             long = len(data[state])
-#     return(["state"] + range(0,long))
+averagesFile = open("averages.html", "rt")
+averagesFileContents = averagesFile.read()
+averagesFileContents = re.sub(searchTerm, newDateString, averagesFileContents)
+averagesFile.close()
 
-# def sortData(data):
-#     return sorted(data)
+averagesFile = open("averages.html", "wt")
+averagesFile.write(averagesFileContents)
+averagesFile.close()
 
+scaledAveragesFile = open("scaled_averages.html", "rt")
+scaledAveragesFileContents = scaledAveragesFile.read()
+scaledAveragesFileContents = re.sub(searchTerm, newDateString, scaledAveragesFileContents)
+scaledAveragesFile.close()
 
+scaledAveragesFile = open("scaled_averages.html", "wt")
+scaledAveragesFile.write(scaledAveragesFileContents)
+scaledAveragesFile.close()
 
-# with open('formattedCovidCases.csv', 'w') as newfile:
-#     writer = csv.writer(newfile)
-#     writer.writerow(createTitleRow(covid_cases))
-#     for state in sortData(covid_cases):
-#         if len(covid_cases[state]) > 0:
-#             newrow = [state] + covid_cases[state]
-#             writer.writerow(newrow)
+casesFile = open("index.html", "rt")
+casesFileContents = casesFile.read()
+casesFileContents = re.sub(searchTerm, newDateString, casesFileContents)
+casesFile.close()
 
-# with open('formattedCovidDeaths.csv', 'w') as newfile:
-#     writer = csv.writer(newfile)
-#     writer.writerow(createTitleRow(covid_deaths))
-#     for state in sortData(covid_deaths):
-#         if len(covid_deaths[state]) > 0:
-#             newrow = [state] + covid_deaths[state]
-#             writer.writerow(newrow)
+casesFile = open("index.html", "wt")
+casesFile.write(casesFileContents)
+casesFile.close()
 
-# with open('formattedCovidAverages.csv', 'w') as newfile:
-#     writer = csv.writer(newfile)
-#     writer.writerow(createTitleRow(covid_averages))
-#     for state in sortData(covid_averages):
-#         gap = len(all_cases["Washington"]) - len(covid_averages[state])
-#         #print (state, len(covid_averages[state]), len(all_cases["Washington"]), gap)
-#         if gap > 0:
-#             zeros = [0] * gap
-#             covid_averages[state] = zeros + covid_averages[state]
-#         #print (state, len(covid_averages[state]), covid_averages[state])
-#         newrow = [state] + covid_averages[state]
-#         writer.writerow(newrow)
+deathsFile = open("deaths.html", "rt")
+deathsFileContents = deathsFile.read()
+deathsFileContents = re.sub(searchTerm, newDateString, deathsFileContents)
+deathsFile.close()
 
-# with open('formattedCovidScaledAverages.csv', 'w') as newfile:
-#     writer = csv.writer(newfile)
-#     writer.writerow(createTitleRow(covid_scaled_averages))
-#     for state in sortData(covid_scaled_averages):
-#         gap = len(all_cases["Washington"]) - len(covid_scaled_averages[state])
-#         #print (state, len(covid_averages[state]), len(all_cases["Washington"]), gap)
-#         if gap > 0:
-#             zeros = [0] * gap
-#             covid_scaled_averages[state] = zeros + covid_scaled_averages[state]
-#         #print (state, len(covid_averages[state]), covid_averages[state])
-#         newrow = [state] + covid_scaled_averages[state]
-#         writer.writerow(newrow)
-
-# # set date in both files
-# today = date.today()
-# todayString = today.strftime("%B %d, %Y")
-# searchTerm = "<span id=\"date\">.*<\/span>"
-# newDateString = "<span id=\"date\">" + todayString + "</span>"
-
-# averagesFile = open("averages.html", "rt")
-# averagesFileContents = averagesFile.read()
-# averagesFileContents = re.sub(searchTerm, newDateString, averagesFileContents)
-# averagesFile.close()
-
-# averagesFile = open("averages.html", "wt")
-# averagesFile.write(averagesFileContents)
-# averagesFile.close()
-
-# scaledAveragesFile = open("scaled_averages.html", "rt")
-# scaledAveragesFileContents = scaledAveragesFile.read()
-# scaledAveragesFileContents = re.sub(searchTerm, newDateString, scaledAveragesFileContents)
-# scaledAveragesFile.close()
-
-# scaledAveragesFile = open("scaled_averages.html", "wt")
-# scaledAveragesFile.write(scaledAveragesFileContents)
-# scaledAveragesFile.close()
-
-# casesFile = open("index.html", "rt")
-# casesFileContents = casesFile.read()
-# casesFileContents = re.sub(searchTerm, newDateString, casesFileContents)
-# casesFile.close()
-
-# casesFile = open("index.html", "wt")
-# casesFile.write(casesFileContents)
-# casesFile.close()
-
-# deathsFile = open("deaths.html", "rt")
-# deathsFileContents = deathsFile.read()
-# deathsFileContents = re.sub(searchTerm, newDateString, deathsFileContents)
-# deathsFile.close()
-
-# deathsFile = open("deaths.html", "wt")
-# deathsFile.write(deathsFileContents)
-# deathsFile.close()
+deathsFile = open("deaths.html", "wt")
+deathsFile.write(deathsFileContents)
+deathsFile.close()
