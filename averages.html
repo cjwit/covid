@@ -1,211 +1,226 @@
 <!DOCTYPE html>
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>COVID-19 statistics by US state - Witulski</title>
+  <link rel="stylesheet" href="src/bootstrap.min.css">
   <link rel="stylesheet" href="src/styles.css">
 </head>
+
 <body>
 
-<center>
-  <h1>COVID-19 seven day averages of new cases by US states</h1>
-  <p><a href="index.html">See cases</a> | <a href="deaths.html">See deaths</a> | <a href="scaled_averages.html">See seven day averages scaled by population</a></p>
-  <p>Click state names to show their graphs | Developed by <a href="https://cwitulski.com">Christopher Witulski</a> | Last updated on <span id="date">July 04, 2020</span></p>
-</center>
+  <div class="page-header">
+    <h1>COVID-19 statistics by US states since their 100th reported case</h1>
+    <p>Last updated on <span id="date">July 04, 2020</span>. Click state names to show their graphs individually. Works
+      best on mobile if you turn the phone sideways. Developed by <a href="https://cwitulski.com">Christopher
+        Witulski</a>.</p>
+    <p>
+      <a href="index.html" class="btn btn-primary">Total cases</a>
+      <a href="deaths.html" class="btn btn-primary">Total deaths</a>
+      <a href="scaled_averages.html" class="btn btn-primary">Scaled averages</a>
+    </p>
+  </div>
 
-<!-- load the d3.js library -->
-<script src="src/d3.min.js"></script>
+  <!-- load the d3.js library -->
+  <script src="src/d3.min.js"></script>
 
-<script>
+  <script>
 
-// Set the dimensions of the canvas / graph
-var margin = {top: 30, right: 50, bottom: 320, left: 50},
-    width = 800 - margin.left - margin.right,
-    height = 800 - margin.top - margin.bottom;
+    // Set the dimensions of the canvas / graph
+    var margin = { top: 30, right: 50, bottom: 320, left: 50 },
+      width = 800 - margin.left - margin.right,
+      height = 800 - margin.top - margin.bottom;
 
-// Set the ranges
-// Change Y to scale.linear() for linear scale
-var x = d3.time.scale().range([0, width]);
-var y = d3.scale.linear().range([height, 0]);
+    // Set the ranges
+    // Change Y to scale.linear() for linear scale
+    var x = d3.time.scale().range([0, width]);
+    var y = d3.scale.linear().range([height, 0]);
 
-// Define the axes
-var xAxis = d3.svg.axis()
-  .scale(x)
-  .orient("bottom")
-  .ticks(5);
+    // Define the axes
+    var xAxis = d3.svg.axis()
+      .scale(x)
+      .orient("bottom")
+      .ticks(5);
 
-var yAxis = d3.svg.axis()
-	.scale(y)
-	.orient("left")
-  .tickSize(-width, 0, 0)
-	.tickFormat(function(d) {return y.tickFormat(5,d3.format(",d"))(d)})
-	.ticks(5);
+    var yAxis = d3.svg.axis()
+      .scale(y)
+      .orient("left")
+      .tickSize(-width, 0, 0)
+      .tickFormat(function (d) { return y.tickFormat(5, d3.format(",d"))(d) })
+      .ticks(5);
 
-// Define the line
-var dataline = d3.svg.line()
-  .x(function(d) { return x(d.date); })
-  .y(function(d) { return y(d.average); });
+    // Define the line
+    var dataline = d3.svg.line()
+      .x(function (d) { return x(d.date); })
+      .y(function (d) { return y(d.average); });
 
-// Adds the svg canvas
-var svg = d3.select("body")
-    .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-        .attr("transform",
-              "translate(" + margin.left + "," + margin.top + ")");
+    // Adds the svg canvas
+    var svg = d3.select("body")
+      .append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform",
+        "translate(" + margin.left + "," + margin.top + ")");
 
-var tooltip = d3.select("body")
-    .append("div")
-        .attr("class", "tooltip")
-        .style("opacity", 0);
+    var tooltip = d3.select("body")
+      .append("div")
+      .attr("class", "tooltip")
+      .style("opacity", 0);
 
-// Get the data
-d3.json("data.json", function(error, data) {
-    
-    // Dynamically scale the range of the data
-    var dayOne = new Date(2020,0,21);
-    var yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
+    // Get the data
+    d3.json("data.json", function (error, data) {
 
-		x.domain([dayOne, yesterday]);
-		y.domain([100, data.maxAverages]);
+      // Dynamically scale the range of the data
+      var dayOne = new Date(2020, 0, 21);
+      var yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
 
-    // Add the X Axis
-    svg.append("g")
-      .attr("class", "x axis")
-      .attr("transform", "translate(0," + height + ")")
-      .call(xAxis);
+      x.domain([dayOne, yesterday]);
+      y.domain([100, data.maxAverages]);
 
-    // Add the Y Axis
-    svg.append("g")
-      .attr("class", "y axis")
-      .call(yAxis)
+      // Add the X Axis
+      svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis);
 
-    svg.append('text')
-      .attr('x', 10)
-      .attr('y', -10)
-      .attr('class', 'title')
-      .text('Seven day rolling average')
+      // Add the Y Axis
+      svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis)
 
-		var color = d3.scale.category10();  // set the color scale
+      svg.append('text')
+        .attr('x', 10)
+        .attr('y', -10)
+        .attr('class', 'title')
+        .text('Seven day rolling average')
 
-    // Loop through each state
-    var stateData = Object.entries(data.states).sort(
-      function(a, b) { 
-        return a[0] > b[0];
-      }
-    );
-		stateData.forEach(function(d, i) {
-      d = d[1]; // get object from iterator array
+      var color = d3.scale.category10();  // set the color scale
 
-      // add dates for x values
-      var pairs = [];
-      for (var day = 0; day < data.totalDays; day++) {
-        let currentDay = new Date(dayOne.valueOf() + day * 24 * 60 * 60 * 1000);
-        pairs.push({ "date": currentDay, "average": d.averages[day] });
-      };
+      // Loop through each state
+      var stateData = Object.entries(data.states).sort(
+        function (a, b) {
+          return a[0] > b[0];
+        }
+      );
+      stateData.forEach(function (d, i) {
+        d = d[1]; // get object from iterator array
 
-      svg.append("path")
-				.attr("class", "line")
-				.style("stroke", function() {
-					return d.color = color(d.name);
-				})
-        .attr("id", 'tag' + d.name.replace(/\s+/g, ''))
-        .style('opacity', 0.4)
-		    .attr("d", dataline(pairs))
-        .on("mouseover", function() {
+        // add dates for x values
+        var pairs = [];
+        for (var day = 0; day < data.totalDays; day++) {
+          let currentDay = new Date(dayOne.valueOf() + day * 24 * 60 * 60 * 1000);
+          pairs.push({ "date": currentDay, "average": d.averages[day] });
+        };
 
-          // color label on mouseover
-          d3.select('#label' + d.name.replace(/\s+/g, ''))
-            .transition().duration(200)
-            .style("opacity", 1)
-
-          // color line on mouseover
-          d3.select("#tag"+d.name.replace(/\s+/g, ''))
-            .transition().duration(200)
-            .style("opacity", 1)
-            .style('stroke-width', 8);
-
-          // build tooltip
-          tooltip.transition()
-            .duration(100)
-            .style("opacity", .9);
-
-          tooltip.html(function() {
-            return "<b>" + d.name + "</b> max: " + Math.round(d.maxAverages).toLocaleString() + " current: " + Math.round(Number(d.averages[d.averages.length - 1])).toLocaleString();
+        svg.append("path")
+          .attr("class", "line")
+          .style("stroke", function () {
+            return d.color = color(d.name);
           })
-            .style('left', (d3.event.pageX - 50) + 'px')
-            .style('top', (d3.event.pageY - 50) + "px");
-        })
-        .on("mouseout", function() {
-          tooltip.transition()
-            .duration(100)
-            .style("opacity", 0);
+          .attr("id", 'tag' + d.name.replace(/\s+/g, ''))
+          .style('opacity', 0.4)
+          .attr("d", dataline(pairs))
+          .on("mouseover", function () {
 
-          if (!d.active) {
+            // color label on mouseover
             d3.select('#label' + d.name.replace(/\s+/g, ''))
               .transition().duration(200)
-              .style("opacity", 0.4)
+              .style("opacity", 1)
+
+            // color line on mouseover
             d3.select("#tag" + d.name.replace(/\s+/g, ''))
               .transition().duration(200)
-              .style('opacity', 0.4)
-              .style('stroke-width', 2);
+              .style("opacity", 1)
+              .style('stroke-width', 8);
+
+            // build tooltip
+            tooltip.transition()
+              .duration(100)
+              .style("opacity", .9);
+
+            tooltip.html(function () {
+              return "<b>" + d.name + "</b> max: " + Math.round(d.maxAverages).toLocaleString() + " current: " + Math.round(Number(d.averages[d.averages.length - 1])).toLocaleString();
+            })
+              .style('left', (d3.event.pageX - 50) + 'px')
+              .style('top', (d3.event.pageY - 50) + "px");
+          })
+          .on("mouseout", function () {
+            tooltip.transition()
+              .duration(100)
+              .style("opacity", 0);
+
+            if (!d.active) {
+              d3.select('#label' + d.name.replace(/\s+/g, ''))
+                .transition().duration(200)
+                .style("opacity", 0.4)
+              d3.select("#tag" + d.name.replace(/\s+/g, ''))
+                .transition().duration(200)
+                .style('opacity', 0.4)
+                .style('stroke-width', 2);
             }
-        });
+          });
 
-      // Make space for the legend
-      // calculate individually based on i to place instead of working through this
-      legendWidthSpacing = width/4
-      d.active = false
+        // Make space for the legend
+        // calculate individually based on i to place instead of working through this
+        legendWidthSpacing = width / 4
+        d.active = false
 
-      // Build legend
-      svg.append("text")
-        .attr("x", (legendWidthSpacing/2 + Math.floor(i/14) * legendWidthSpacing))
-        .attr("y", height + 40 + (i % 14 * 20))
-        .attr("class", "legend")
-        .attr("id", 'label' + d.name.replace(/\s+/g, ''))
-        .style("fill", function() { return d.color = color(d.name); })
-        .on("mouseover", function() {
-          if (!d.active) {
+        // Build legend
+        svg.append("text")
+          .attr("x", (legendWidthSpacing / 2 + Math.floor(i / 14) * legendWidthSpacing))
+          .attr("y", height + 40 + (i % 14 * 20))
+          .attr("class", "legend")
+          .attr("id", 'label' + d.name.replace(/\s+/g, ''))
+          .style("fill", function () { return d.color = color(d.name); })
+          .on("mouseover", function () {
+            if (!d.active) {
+              d3.select("#tag" + d.name.replace(/\s+/g, ''))
+                .transition().duration(200)
+                .style('opacity', 1)
+                .style('stroke-width', 4);
+            }
+          })
+          .on("mouseout", function () {
+            if (!d.active) {
+              d3.select("#tag" + d.name.replace(/\s+/g, ''))
+                .transition().duration(200)
+                .style('opacity', 0.1)
+                .style('stroke-width', 2);
+            }
+          })
+          .on("click", function () {
+            var newOpacity = d.active ? 0.4 : 1;
+            var newStrokeWidth = d.active ? 2 : 4;
+            d3.select("#label" + d.name.replace(/\s+/g, ''))
+              .transition().duration(200)
+              .style('opacity', newOpacity);
             d3.select("#tag" + d.name.replace(/\s+/g, ''))
               .transition().duration(200)
-              .style('opacity', 1)
-              .style('stroke-width', 4);
-            }
-        })
-        .on("mouseout", function() {
-          if (!d.active) {
-            d3.select("#tag" + d.name.replace(/\s+/g, ''))
-              .transition().duration(200)
-              .style('opacity', 0.1)
-              .style('stroke-width', 2);
-            }
-        })
-        .on("click", function () {
-          var newOpacity = d.active ? 0.4 : 1;
-          var newStrokeWidth = d.active ? 2 : 4;
-          d3.select("#label" + d.name.replace(/\s+/g, ''))
-            .transition().duration(200)
-            .style('opacity', newOpacity);
-          d3.select("#tag" + d.name.replace(/\s+/g, ''))
-            .transition().duration(200)
-            .style('opacity', newOpacity)
-            .style('stroke-width', newStrokeWidth);
-          d.active = !d.active
-        })
-        .text(d.name);
-		});
+              .style('opacity', newOpacity)
+              .style('stroke-width', newStrokeWidth);
+            d.active = !d.active
+          })
+          .text(d.name);
+      });
 
-	});
+    });
 
-</script>
+  </script>
 
-<p>
-  This chart tracks the seven day average of cases of COVID-19 across the USA. The data comes from the New York Times (see <a href = 'https://www.nytimes.com/article/coronavirus-county-data-us.html?action=click&module=Spotlight&pgtype=Homepage'>here for more information</a> and <a href = 'https://github.com/nytimes/covid-19-data'>here for the GitHub data</a>). The idea for the chart comes from <a href = "https://ourworldindata.org/grapher/covid-confirmed-cases-since-100th-case">this similar one from Our World in Data</a>.
-</p>
-<p>
-  I wouldn't depend on this for much, it's mostly a chance for me to see a graph that I wish were easier to find while checking to see if I remember how to use D3.js.
-</p>  
-<script data-goatcounter="https://witulski.goatcounter.com/count"
-        async src="//gc.zgo.at/count.js"></script>
+  <p>
+    This chart tracks the seven day average of cases of COVID-19 across the USA. The data comes from the New York Times
+    (see <a
+      href='https://www.nytimes.com/article/coronavirus-county-data-us.html?action=click&module=Spotlight&pgtype=Homepage'>here
+      for more information</a> and <a href='https://github.com/nytimes/covid-19-data'>here for the GitHub data</a>). The
+    idea for the chart comes from <a
+      href="https://ourworldindata.org/grapher/covid-confirmed-cases-since-100th-case">this similar one from Our World
+      in Data</a>.
+  </p>
+  <p>
+    I wouldn't depend on this for much, it's mostly a chance for me to see a graph that I wish were easier to find while
+    checking to see if I remember how to use D3.js.
+  </p>
+  <script data-goatcounter="https://witulski.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>

@@ -4,19 +4,23 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>COVID-19 statistics by US state - Witulski</title>
+  <link rel="stylesheet" href="src/bootstrap.min.css">
   <link rel="stylesheet" href="src/styles.css">
 </head>
 
 <body>
 
-  <center>
-    <h1>COVID-19 statistics by US states since their 10th reported death</h1>
-    <p><a href="index.html">See cases</a> | <a href="averages.html">See seven day averages</a> | <a
-        href="scaled_averages.html">See seven day averages scaled by population</p>
-    <p>Click state names to show their graphs | Developed by <a href="https://cwitulski.com">Christopher Witulski</a> |
-      Last updated on June 13, 2020</p>
-  </center>
-
+  <div class="page-header">
+    <h1>COVID-19 statistics by US states since their 100th reported case</h1>
+    <p>Last updated on <span id="date">July 04, 2020</span>. Click state names to show their graphs individually. Works
+      best on mobile if you turn the phone sideways. Developed by <a href="https://cwitulski.com">Christopher
+        Witulski</a>.</p>
+    <p>
+      <a href="index.html" class="btn btn-primary">Total cases</a>
+      <a href="averages.html" class="btn btn-primary">Averages</a>
+      <a href="scaled_averages.html" class="btn btn-primary">Scaled averages</a>
+    </p>
+  </div>
 
   <!-- load the d3.js library -->
   <script src="src/d3.min.js"></script>
