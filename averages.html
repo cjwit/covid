@@ -184,7 +184,7 @@ d3.json("data.json", function(error, data) {
             return d.name + ", max: " + Math.round(d.maxAverages) + ", current: " + Math.round(Number(d.averages[d.averages.length - 1]));
           })
             .style('left', (d3.event.pageX - 50) + 'px')
-            .style('top', (d3.event.pageY - 80) + "px");
+            .style('top', (d3.event.pageY - 50) + "px");
         })
         .on("mouseout", function() {
           tooltip.transition()
