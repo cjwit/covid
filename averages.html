@@ -147,9 +147,9 @@ d3.json("data.json", function(error, data) {
 
       // add dates for x values
       var pairs = [];
-      for (var i = 0; i < data.totalDays; i++) {
-        let currentDay = new Date(dayOne.valueOf() + i * 24 * 60 * 60 * 1000);
-        pairs.push({ "date": currentDay, "average": d.averages[i] });
+      for (var day = 0; day < data.totalDays; day++) {
+        let currentDay = new Date(dayOne.valueOf() + day * 24 * 60 * 60 * 1000);
+        pairs.push({ "date": currentDay, "average": d.averages[day] });
       };
 
       svg.append("path")
@@ -157,13 +157,13 @@ d3.json("data.json", function(error, data) {
 				.style("stroke", function() {
 					return d.color = color(d.name);
 				})
-        .attr("id", 'tag'+d.name.replace(/\s+/g, ''))
+        .attr("id", 'tag' + d.name.replace(/\s+/g, ''))
         .style('opacity', 0.4)
 		    .attr("d", dataline(pairs))
         .on("mouseover", function() {
 
           // color label on mouseover
-          d3.select('#label'+d.name.replace(/\s+/g, ''))
+          d3.select('#label' + d.name.replace(/\s+/g, ''))
             .transition().duration(200)
             .style("opacity", 1)
 
@@ -192,10 +192,10 @@ d3.json("data.json", function(error, data) {
             .style("opacity", 0);
 
           if (!d.active) {
-            d3.select('#label'+d.name.replace(/\s+/g, ''))
+            d3.select('#label' + d.name.replace(/\s+/g, ''))
               .transition().duration(200)
-              .style("opacity", .4)
-            d3.select("#tag"+d.name.replace(/\s+/g, ''))
+              .style("opacity", 0.4)
+            d3.select("#tag" + d.name.replace(/\s+/g, ''))
               .transition().duration(200)
               .style('opacity', 0.4)
               .style('stroke-width', 2);
@@ -210,13 +210,13 @@ d3.json("data.json", function(error, data) {
       // Build legend
       svg.append("text")
         .attr("x", (legendWidthSpacing/2 + Math.floor(i/14) * legendWidthSpacing))
-        .attr("y", height + 40 + (i%14 * 20))
+        .attr("y", height + 40 + (i % 14 * 20))
         .attr("class", "legend")
-        .attr("id", 'label'+d.name.replace(/\s+/g, ''))
-        .style("fill", function() {return d.color = color(d.name); })
+        .attr("id", 'label' + d.name.replace(/\s+/g, ''))
+        .style("fill", function() { return d.color = color(d.name); })
         .on("mouseover", function() {
           if (!d.active) {
-            d3.select("#tag"+d.name.replace(/\s+/g, ''))
+            d3.select("#tag" + d.name.replace(/\s+/g, ''))
               .transition().duration(200)
               .style('opacity', 1)
               .style('stroke-width', 4);
@@ -224,7 +224,7 @@ d3.json("data.json", function(error, data) {
         })
         .on("mouseout", function() {
           if (!d.active) {
-            d3.select("#tag"+d.name.replace(/\s+/g, ''))
+            d3.select("#tag" + d.name.replace(/\s+/g, ''))
               .transition().duration(200)
               .style('opacity', 0.1)
               .style('stroke-width', 2);
@@ -233,10 +233,10 @@ d3.json("data.json", function(error, data) {
         .on("click", function () {
           var newOpacity = d.active ? 0.4 : 1;
           var newStrokeWidth = d.active ? 2 : 4;
-          d3.select("#label"+d.name.replace(/\s+/g, ''))
+          d3.select("#label" + d.name.replace(/\s+/g, ''))
             .transition().duration(200)
             .style('opacity', newOpacity);
-          d3.select("#tag"+d.name.replace(/\s+/g, ''))
+          d3.select("#tag" + d.name.replace(/\s+/g, ''))
             .transition().duration(200)
             .style('opacity', newOpacity)
             .style('stroke-width', newStrokeWidth);
@@ -254,7 +254,7 @@ d3.json("data.json", function(error, data) {
 </p>
 <p>
   I wouldn't depend on this for much, it's mostly a chance for me to see a graph that I wish were easier to find while checking to see if I remember how to use D3.js.
-</p>
+</p>  
 <script data-goatcounter="https://witulski.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
 </body>
