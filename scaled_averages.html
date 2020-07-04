@@ -48,7 +48,6 @@ path {
   position: absolute;
   text-align: left;
   font: 14px sans-serif;
-  font-weight: bold;
 }
 
 </style>
@@ -147,9 +146,9 @@ d3.json("data.json", function(error, data) {
 
       // add dates for x values
       var pairs = [];
-      for (var i = 0; i < data.totalDays; i++) {
-        let currentDay = new Date(dayOne.valueOf() + i * 24 * 60 * 60 * 1000);
-        pairs.push({ "date": currentDay, "scaledAverage": d.scaledAverages[i] });
+      for (var day = 0; day < data.totalDays; day++) {
+        let currentDay = new Date(dayOne.valueOf() + day * 24 * 60 * 60 * 1000);
+        pairs.push({ "date": currentDay, "scaledAverage": d.scaledAverages[day] });
       };
 
       svg.append("path")
@@ -179,7 +178,7 @@ d3.json("data.json", function(error, data) {
             .style("opacity", .9);
 
           tooltip.html(function() {
-            return d.name + ", max: " + Math.round(d.maxScaledAverages) + ", current: " + Math.round(Number(d.scaledAverages[d.scaledAverages.length - 1]));
+            return "<b>" + d.name + "</b> max: " + Math.round(d.maxScaledAverages).toLocaleString() + " current: " + Math.round(Number(d.scaledAverages[d.scaledAverages.length - 1])).toLocaleString();
           })
             .style('left', (d3.event.pageX - 50) + 'px')
             .style('top', (d3.event.pageY - 80) + "px");

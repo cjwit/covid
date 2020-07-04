@@ -48,7 +48,6 @@ path {
   position: absolute;
   text-align: left;
   font: 14px sans-serif;
-  font-weight: bold;
 }
 
 </style>
@@ -174,14 +173,12 @@ d3.json("data.json", function(error, data) {
             .style('stroke-width', 8);
 
           // build tooltip
-          // console.log('in path', d.name, d.values[0].cases)
           tooltip.transition()
             .duration(100)
             .style("opacity", .9);
 
           tooltip.html(function() {
-            // FIXME: why is the last case undefined?
-            return d.name + ", max: " + Math.round(d.maxAverages) + ", current: " + Math.round(Number(d.averages[d.averages.length - 1]));
+            return "<b>" + d.name + "</b> max: " + Math.round(d.maxAverages).toLocaleString() + " current: " + Math.round(Number(d.averages[d.averages.length - 1])).toLocaleString();
           })
             .style('left', (d3.event.pageX - 50) + 'px')
             .style('top', (d3.event.pageY - 50) + "px");

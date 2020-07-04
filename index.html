@@ -48,7 +48,6 @@ path {
   position: absolute;
   text-align: left;
   font: 14px sans-serif;
-  font-weight: bold;
 }
 
 </style>
@@ -187,7 +186,7 @@ d3.json("data.json", function(error, data) {
                 lastCase = Number(d.cases[i])
               }
             }
-            return d.name + ": " + lastCase.toLocaleString() + " total cases";
+            return "<b>" + d.name + "</b> " + lastCase.toLocaleString() + " total cases";
           })
             .style('left', (d3.event.pageX - 50) + 'px')
             .style('top', (d3.event.pageY - 50) + "px");

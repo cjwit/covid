@@ -48,7 +48,6 @@ path {
   position: absolute;
   text-align: left;
   font: 14px sans-serif;
-  font-weight: bold;
 }
 
 </style>
@@ -190,7 +189,7 @@ d3.json("data.json", function(error, data) {
                 lastDeath = Number(deathsArray[i])
               }
             }
-            return d.name + ": " + lastDeath.toLocaleString() + " total deaths";
+            return "<b>" + d.name + "</b> " + lastDeath.toLocaleString() + " total deaths";
           })
             .style('left', (d3.event.pageX - 50) + 'px')
             .style('top', (d3.event.pageY - 50) + "px");
