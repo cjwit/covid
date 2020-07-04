@@ -68,7 +68,7 @@ def getMax(state, statistic):
     for entry in data['states'][state][statistic]:
         if entry > max:
             max = entry
-    name = 'max' + statistic.capitalize()
+    name = 'max' + statistic[0].upper() + statistic[1:]
     print (state, name, max)
     data['states'][state][name] = max
 
