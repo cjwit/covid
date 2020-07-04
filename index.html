@@ -138,7 +138,7 @@ d3.json("data.json", function(error, data) {
 
 		var color = d3.scale.category10();  // set the color scale
 
-    // Loop through each symbol / key
+    // Loop through each state
     var stateData = Object.entries(data.states).sort(
       function(a, b) { 
         return a[0] > b[0];
@@ -190,7 +190,7 @@ d3.json("data.json", function(error, data) {
             return d.name + ": " + lastCase.toLocaleString() + " total cases";
           })
             .style('left', (d3.event.pageX - 50) + 'px')
-            .style('top', (d3.event.pageY - 80) + "px");
+            .style('top', (d3.event.pageY - 50) + "px");
         })
         .on("mouseout", function() {
           tooltip.transition()
