@@ -9,6 +9,7 @@
 </head>
 
 <body>
+  <div class="container" id="container">
 
   <div class="page-header">
     <h1>COVID-19 statistics by US states since their 100th reported case</h1>
@@ -28,7 +29,7 @@
   <script>
 
     // Set the dimensions of the canvas / graph
-    var margin = { top: 30, right: 50, bottom: 320, left: 50 },
+    var margin = { top: 30, right: 50, bottom: 320, left: 20 },
       width = 800 - margin.left - margin.right,
       height = 800 - margin.top - margin.bottom;
 
@@ -56,13 +57,14 @@
       .y(function (d) { return y(d.scaledAverage); });
 
     // Adds the svg canvas
-    var svg = d3.select("body")
-      .append("svg")
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
-      .append("g")
-      .attr("transform",
-        "translate(" + margin.left + "," + margin.top + ")");
+    var svg = d3.select("#container")
+        .append("svg")
+        .attr("width", "100%")
+        .attr("viewBox", "0 0 800 800")
+        .attr("preserveAspectRatio", "xMidYMid meet")
+        .append("g")
+        .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
 
     var tooltip = d3.select("body")
       .append("div")
@@ -223,5 +225,6 @@
     I wouldn't depend on this for much, it's mostly a chance for me to see a graph that I wish were easier to find while
     checking to see if I remember how to use D3.js.
   </p>
+  </div>
   <script data-goatcounter="https://witulski.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
