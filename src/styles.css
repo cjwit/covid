@@ -4,6 +4,10 @@ body {
   padding: 50px 5%;
 }
 
+.btn {
+  margin-bottom: .4rem;
+}
+
 svg {
   display: block;
   margin: 0 auto;
