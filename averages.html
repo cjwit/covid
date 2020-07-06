@@ -143,10 +143,13 @@
                 .style("opacity", .9);
 
               tooltip.html(function () {
-                return "<b>" + d.name + "</b> max: " + Math.round(d.maxAverages).toLocaleString() + " current: " + Math.round(Number(d.averages[d.averages.length - 1])).toLocaleString();
+                return "<b>" + d.name + 
+                  "</b> max: " + Math.round(d.maxAverages).toLocaleString() + 
+                  " current: " + Math.round(Number(d.averages[d.averages.length - 1])).toLocaleString() +
+                  "<br>yesterday's cases: " + (d.cases[d.cases.length - 1] - d.cases[d.cases.length - 2]).toLocaleString();
               })
-                .style('left', (d3.event.pageX - 50) + 'px')
-                .style('top', (d3.event.pageY - 50) + "px");
+                .style('left', (d3.event.pageX - 150) + 'px')
+                .style('top', (d3.event.pageY - 60) + "px");
             })
             .on("mouseout", function () {
               tooltip.transition()
