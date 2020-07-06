@@ -71,6 +71,53 @@
         .attr("class", "tooltip")
         .style("opacity", 0);
 
+      var highlight = function(current) {
+        // color label on mouseover
+        d3.select('#label' + current.name.replace(/\s+/g, ''))
+          .transition().duration(200)
+          .style("opacity", 1)
+
+        // color line on mouseover
+        d3.select("#tag" + name.replace(/\s+/g, ''))
+          .transition().duration(200)
+          .style("opacity", 1)
+          .style('stroke-width', 8);
+
+        // build tooltip
+        // console.log('in path', d.key, d.values[0].cases)
+        tooltip.transition()
+          .duration(100)
+          .style("opacity", .9);
+
+        tooltip.html(function () {
+          var lastCase = 0;
+          for (i = 0; i < current.cases.length; i++) {
+            if (Number(current.cases[i]) > lastCase) {
+              lastCase = Number(current.cases[i])
+            }
+          }
+          return "<b>" + current.name + "</b> " + lastCase.toLocaleString() + " total cases";
+        })
+          .style('left', (d3.event.pageX - 150) + 'px')
+          .style('top', (d3.event.pageY - 50) + "px");
+      };
+
+      var removeHighlight = function(current) {
+        tooltip.transition()
+          .duration(100)
+          .style("opacity", 0);
+
+        if (!current.active) {
+          d3.select('#label' + current.name.replace(/\s+/g, ''))
+            .transition().duration(200)
+            .style("opacity", .4)
+          d3.select("#tag" + current.name.replace(/\s+/g, ''))
+            .transition().duration(200)
+            .style('opacity', 0.4)
+            .style('stroke-width', 2);
+        }
+      }
+
       // Get the data
       d3.json("data.json", function (error, data) {
 
@@ -126,50 +173,10 @@
             .style('opacity', 0.4)
             .attr("d", dataLine(d.cases))
             .on("mouseover", function () {
-
-              // color label on mouseover
-              d3.select('#label' + d.name.replace(/\s+/g, ''))
-                .transition().duration(200)
-                .style("opacity", 1)
-
-              // color line on mouseover
-              d3.select("#tag" + d.name.replace(/\s+/g, ''))
-                .transition().duration(200)
-                .style("opacity", 1)
-                .style('stroke-width', 8);
-
-              // build tooltip
-              // console.log('in path', d.key, d.values[0].cases)
-              tooltip.transition()
-                .duration(100)
-                .style("opacity", .9);
-
-              tooltip.html(function () {
-                var lastCase = 0;
-                for (i = 0; i < d.cases.length; i++) {
-                  if (Number(d.cases[i]) > lastCase) {
-                    lastCase = Number(d.cases[i])
-                  }
-                }
-                return "<b>" + d.name + "</b> " + lastCase.toLocaleString() + " total cases";
-              })
-                .style('left', (d3.event.pageX - 150) + 'px')
-                .style('top', (d3.event.pageY - 50) + "px");
+              highlight(d);
             })
             .on("mouseout", function () {
-              tooltip.transition()
-                .duration(100)
-                .style("opacity", 0);
-
-              if (!d.active) {
-                d3.select('#label' + d.name.replace(/\s+/g, ''))
-                  .transition().duration(200)
-                  .style("opacity", .4)
-                d3.select("#tag" + d.name.replace(/\s+/g, ''))
-                  .transition().duration(200)
-                  .style('opacity', 0.4)
-                  .style('stroke-width', 2);
-              }
+              removeHighlight(d);
             });
 
           // Make space for the legend

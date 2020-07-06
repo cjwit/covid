@@ -6,6 +6,9 @@ I wouldn't depend on this for much, it's mostly a chance for me (Christopher Wit
 
 ## Next
 
-* Fix issue in python code that creates the wrong length title line 
-* Check for hover issues
-* Add doubling time lines
+In index.html
+
+* Split highlight and removeHighlight logic into different functions
+* Incorporate button logic into highlight and removeHighlight (be sure to account for opacity differences)
+* Use highlight on mouseover, but disable removeHighlight if the button is active
+* Click should be able to just change the active status, but needs to allow for turning off active even when hovering (to see action) Maybe don't active the legend text?
