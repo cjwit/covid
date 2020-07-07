@@ -13,11 +13,6 @@ svg {
   margin: 0 auto;
 }
 
-path {
-    stroke: steelblue;
-    stroke-width: 2;
-    fill: none;
-}
 
 .axis path,
 .axis line {
@@ -27,6 +22,11 @@ path {
     shape-rendering: crispEdges;
 }
 
+.title {
+  font-size: 16px;
+  font-weight: bold;
+}
+
 .legend {
   font-size: 16px;
   font-weight: bold;
@@ -34,9 +34,8 @@ path {
   opacity: 0.4;
 }
 
-.title {
-  font-size: 16px;
-  font-weight: bold;
+.legend.active {
+  opacity: 1;
 }
 
 .tooltip {
@@ -47,4 +46,15 @@ path {
   position: absolute;
   text-align: left;
   font: 14px sans-serif;
+}
+
+.line {
+  stroke-width: 2;
+  fill: none;
+  opacity: 0.4;
+}
+
+.line.active {
+  opacity: 1;
+  stroke-width: 8;
 }
