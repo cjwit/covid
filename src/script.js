@@ -15,12 +15,12 @@ var buildChart = function (margin) {
 }
 
 // Define the line (linear)
-var dataLine = d3.svg.line()
+var pathFunctionLinear = d3.svg.line()
   .x(function (d, i) { return x(i); })
   .y(function (d) { return y(d); });
 
 // Define the line (time)
-var dataLineTime = d3.svg.line()
+var pathFunctionTime = d3.svg.line()
   .x(function (d) { return x(d.date); })
   .y(function (d) { return y(d.y); });
 

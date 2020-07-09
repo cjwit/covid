@@ -78,7 +78,7 @@
           d.cases = d.cases.filter(function (num) { return num >= 100; });
 
           // build the graph line and legend
-          buildPaths(d, d.cases, dataLine);
+          buildPaths(d, d.cases, pathFunctionLinear);
           buildLegend(d, i);
         });
       });
