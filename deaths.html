@@ -81,7 +81,7 @@
           d.deaths = d.deaths.filter(function (num) { return num >= 10; });
 
           // build the graph line and legend
-          buildPaths(d, d.deaths);
+          buildPaths(d, d.deaths, dataLine);
           buildLegend(d, i);
         });
       });
