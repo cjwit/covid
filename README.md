@@ -5,10 +5,3 @@ This chart tracks cases of COVID-19 across the USA from the date when each state
 I wouldn't depend on this for much, it's mostly a chance for me (Christopher Witulski) to see a graph that I wish were easier to find while checking to see if I remember how to use D3.js.
 
 ## Next
-
-In index.html
-
-* Split highlight and removeHighlight logic into different functions
-* Incorporate button logic into highlight and removeHighlight (be sure to account for opacity differences)
-* Use highlight on mouseover, but disable removeHighlight if the button is active
-* Click should be able to just change the active status, but needs to allow for turning off active even when hovering (to see action) Maybe don't active the legend text?
