@@ -47,7 +47,6 @@
 
         tooltip.html(function () {
           var lastCase = Number(current.cases[current.cases.length - 1]);
-          console.log(current.population);
           var scaled = Math.round(lastCase * 100000.0 / current.population).toLocaleString();
           return '<b>' + current.name + '</b> ' + lastCase.toLocaleString() + ' total cases</br> ' + scaled + ' per 100,000k';
         })
