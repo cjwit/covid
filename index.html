@@ -47,10 +47,12 @@
 
         tooltip.html(function () {
           var lastCase = Number(current.cases[current.cases.length - 1]);
-          return '<b>' + current.name + '</b> ' + lastCase.toLocaleString() + ' total cases';
+          console.log(current.population);
+          var scaled = Math.round(lastCase * 100000.0 / current.population).toLocaleString();
+          return '<b>' + current.name + '</b> ' + lastCase.toLocaleString() + ' total cases</br> ' + scaled + ' per 100,000k';
         })
           .style('left', (d3.event.pageX - 150) + 'px')
-          .style('top', (d3.event.pageY - 50) + 'px');
+          .style('top', (d3.event.pageY - 60) + 'px');
       }
 
       // Get the data
