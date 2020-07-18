@@ -124,6 +124,7 @@ searchTerm = "<span id=\"date\">.*<\/span>"
 newDateString = "<span id=\"date\">" + todayString + "</span>"
 
 def updateDate(filename):
+    print("updating", filename)
     inFile = open(filename, "rt")
     inContents = inFile.read()
     inContents = re.sub(searchTerm, newDateString, inContents)
@@ -132,6 +133,7 @@ def updateDate(filename):
     outFile = open(filename, "wt")
     outFile.write(inContents)
     outFile.close()
+    print("finished", filename)
 
 updateDate("index.html")
 updateDate("scaled_cases.html")
