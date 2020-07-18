@@ -13,7 +13,7 @@
 <body>
   <div class='container' id='container'>
     <div class='page-header'>
-      <h1>COVID-19 cases by US state since their 100th reported case, as percentage of population</h1>
+      <h1>COVID-19 cases by US state as a percentage of population</h1>
       <p>
         Last updated on <span id='date'>July 06, 2020</span>. Click state names to show their graphs individually.
         Works best on mobile if you turn the phone sideways. 
@@ -30,7 +30,7 @@
 
     <script>
       svg = buildChart({ top: 30, right: 50, bottom: 320, left: 60 });
-      chartTitle('Total cases from 100th reported as percentage of state population');
+      chartTitle('Total cases as a percentage of state population');
 
       // Set the ranges
       var x = d3.time.scale().range([0, width]);
