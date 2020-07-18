@@ -31,7 +31,7 @@
       chartTitle('Total cases from 100th reported as percentage of state population');
 
       // Set the ranges
-      var x = d3.scale.linear().range([0, width]);
+      var x = d3.time.scale().range([0, width]);
       var y = d3.scale.linear().range([height, 0]);
 
       // build tooltips
@@ -58,7 +58,10 @@
       // Get the data
       d3.json('data.json', function (error, data) {
 
-        x.domain([0, data.totalDays]);
+        // Dynamically scale the range of the data
+        var dayOne = new Date(2020, 0, 21);
+        var yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
+        x.domain([dayOne, yesterday]);
         y.domain([0, data.maxScaledCases]);
 
         addAxes(x, y);
@@ -72,8 +75,15 @@
           // get object from iterator array
           d = d[1];
 
+          // add dates for x values
+          var pairs = [];
+          for (var day = 0; day < data.totalDays; day++) {
+            let currentDay = new Date(dayOne.valueOf() + day * 24 * 60 * 60 * 1000);
+            pairs.push({ "date": currentDay, "y": d.scaledCases[day] });
+          };
+
           // build the graph line and legend
-          buildPaths(d, d.scaledCases, pathFunctionLinear);
+          buildPaths(d, pairs, pathFunctionTime);
           buildLegend(d, i);
         });
       });
