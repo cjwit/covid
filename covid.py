@@ -14,6 +14,7 @@ def checkState(object, state):
             'cases': [],
             'deaths': [],
             'averages': [],
+            'scaledCases': [],
             'scaledAverages': [],
             'population': 0,
             'name': state
@@ -23,6 +24,7 @@ def checkState(object, state):
 def addCases(row, state):
     cases = int(row[3])
     data['states'][state]['cases'].append(cases)
+    data['states'][state]['scaledCases'].append(cases * 1.0 * 100 / data['states'][state]['population'])
 
 def addDeaths(row, state):
     deaths = int(row[4])
@@ -93,16 +95,19 @@ setTotalDays()
 
 for state in sorted(data['states'].keys()):
     prependZeros(state, 'cases')
+    prependZeros(state, 'scaledCases')
     prependZeros(state, 'deaths')
     addAverages(state)
     getMax(state, 'cases')
     getMax(state, 'deaths')
     getMax(state, 'averages')
+    getMax(state, 'scaledCases')
     getMax(state, 'scaledAverages')
 
 getMaxOverall('maxCases')
 getMaxOverall('maxDeaths')
 getMaxOverall('maxAverages')
+getMaxOverall('maxScaledCases')
 getMaxOverall('maxScaledAverages')
 
 # write object to file as JSON
@@ -144,6 +149,15 @@ casesFile.close()
 casesFile = open("index.html", "wt")
 casesFile.write(casesFileContents)
 casesFile.close()
+
+scaledCasesFile = open("scaled_cases.html", "rt")
+scaledCasesFileContents = scaledCasesFile.read()
+scaledCasesFileContents = re.sub(searchTerm, newDateString, scaledCasesFileContents)
+scaledCasesFile.close()
+
+scaledCasesFile = open("scaled_cases.html", "wt")
+scaledCasesFile.write(scaledCasesFileContents)
+scaledCasesFile.close()
 
 deathsFile = open("deaths.html", "rt")
 deathsFileContents = deathsFile.read()
