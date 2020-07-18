@@ -123,47 +123,18 @@ todayString = today.strftime("%B %d, %Y")
 searchTerm = "<span id=\"date\">.*<\/span>"
 newDateString = "<span id=\"date\">" + todayString + "</span>"
 
-averagesFile = open("averages.html", "rt")
-averagesFileContents = averagesFile.read()
-averagesFileContents = re.sub(searchTerm, newDateString, averagesFileContents)
-averagesFile.close()
+def updateDate(filename):
+    inFile = open(filename, "rt")
+    inContents = inFile.read()
+    inContents = re.sub(searchTerm, newDateString, inContents)
+    inFile.close()
 
-averagesFile = open("averages.html", "wt")
-averagesFile.write(averagesFileContents)
-averagesFile.close()
+    outFile = open(filename, "wt")
+    outFile.write(inContents)
+    outFile.close()
 
-scaledAveragesFile = open("scaled_averages.html", "rt")
-scaledAveragesFileContents = scaledAveragesFile.read()
-scaledAveragesFileContents = re.sub(searchTerm, newDateString, scaledAveragesFileContents)
-scaledAveragesFile.close()
-
-scaledAveragesFile = open("scaled_averages.html", "wt")
-scaledAveragesFile.write(scaledAveragesFileContents)
-scaledAveragesFile.close()
-
-casesFile = open("index.html", "rt")
-casesFileContents = casesFile.read()
-casesFileContents = re.sub(searchTerm, newDateString, casesFileContents)
-casesFile.close()
-
-casesFile = open("index.html", "wt")
-casesFile.write(casesFileContents)
-casesFile.close()
-
-scaledCasesFile = open("scaled_cases.html", "rt")
-scaledCasesFileContents = scaledCasesFile.read()
-scaledCasesFileContents = re.sub(searchTerm, newDateString, scaledCasesFileContents)
-scaledCasesFile.close()
-
-scaledCasesFile = open("scaled_cases.html", "wt")
-scaledCasesFile.write(scaledCasesFileContents)
-scaledCasesFile.close()
-
-deathsFile = open("deaths.html", "rt")
-deathsFileContents = deathsFile.read()
-deathsFileContents = re.sub(searchTerm, newDateString, deathsFileContents)
-deathsFile.close()
-
-deathsFile = open("deaths.html", "wt")
-deathsFile.write(deathsFileContents)
-deathsFile.close()
+updateDate("index.html")
+updateDate("scaled_cases.html")
+updateDate("deaths.html")
+updateDate("averages.html")
+updateDate("scaled_averages.html")
