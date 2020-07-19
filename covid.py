@@ -1,7 +1,7 @@
 import csv
 import json
 import re
-from datetime import date
+from datetime import date, datetime
 
 # master data list
 data = {
@@ -117,19 +117,22 @@ getMaxOverall('maxScaledAverages')
 with open('data.json', 'w') as output:
     json.dump(data, output)
 
-#
 # set dates in html files
-#
-
 today = date.today()
 todayString = today.strftime("%B %d, %Y")
-searchTerm = "<span id=\"date\">.*<\/span>"
-newDateString = "<span id=\"date\">" + todayString + "</span>"
+searchTermToday = "<span id=\"date\">.*<\/span> with"
+dateStringToday = "<span id=\"date\">" + todayString + "</span> with"
+
+lastDateObject = datetime.strptime(data["lastDate"], "%Y-%m-%d")
+dataString = lastDateObject.strftime("%B %d, %Y")
+searchTermData = "<span id=\"lastData\">.*<\/span>"
+dateStringData = "<span id=\"lastData\">" + dataString + "</span>"
 
 def updateDate(filename):
     inFile = open(filename, "rt")
     inContents = inFile.read()
-    inContents = re.sub(searchTerm, newDateString, inContents)
+    inContents = re.sub(searchTermToday, dateStringToday, inContents)
+    inContents = re.sub(searchTermData, dateStringData, inContents)
     inFile.close()
 
     outFile = open(filename, "wt")
