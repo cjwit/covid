@@ -5,3 +5,6 @@ This chart tracks cases of COVID-19 across the USA from the date when each state
 I wouldn't depend on this for much, it's mostly a chance for me (Christopher Witulski) to see a graph that I wish were easier to find while checking to see if I remember how to use D3.js.
 
 ## Next
+
+* Add US average to scaled charts (cases by population and daily new cases per 100k)
+* Run through webpack to incorporate d3
