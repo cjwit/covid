@@ -61,6 +61,7 @@
 
       // Get the data
       d3.json('data.json', function (error, data) {
+        delete data.states["US Average"];
 
         // Dynamically scale the range of the data using Washington (where first cases appear)
         var daysOver100 = data.states['Washington'].cases.filter(

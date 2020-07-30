@@ -62,7 +62,8 @@
 
       // Get the data
       d3.json("data.json", function (error, data) {
-
+        delete data.states["US Average"];
+        
         // Dynamically scale the range of the data
         var daysOver10 = data.states['Washington'].cases.filter(
           function (n) { return n >= 10; })
