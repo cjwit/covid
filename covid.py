@@ -66,33 +66,29 @@ def getMax(state, statistic):
 
 # run after prepending zeros so that arrays are normalized
 def getUsAverages():
-    usAverage = [0] * data['totalDays']
-    usAverageNew = [0] * data['totalDays']
-    usPopulation = 0
-
-    # get totals
-    for state in data['states']:
-        usPopulation += data['states'][state]['population']
-        for i in range(0, data['totalDays']):
-            usAverage[i] += data['states'][state]['cases'][i]
-            usAverageNew[i] += data['states'][state]['averages'][i]
-    
-    # scale totals
-    for i in range(0, data['totalDays']):
-        usAverage[i] = usAverage[i] * 100.0 / usPopulation
-        usAverageNew[i] = usAverageNew[i] * 100000.0 / usPopulation
-
-    # create data object
-    data['states']['US Average'] = {
-        'cases': [],
-        'deaths': [],
-        'averages': [],
-        'scaledCases': usAverage,
-        'scaledAverages': usAverageNew,
-        'population': usPopulation,
+    usAverageObject = {
+        'cases': [0] * data['totalDays'],
+        'deaths': [0] * data['totalDays'],
+        'averages': [0] * data['totalDays'],
+        'scaledCases': [0] * data['totalDays'],
+        'scaledAverages': [0] * data['totalDays'],
+        'population': 0,
         'name': 'US Average'
     }
 
+    # get totals
+    for state in data['states']:
+        usAverageObject['population'] += data['states'][state]['population']
+        for i in range(0, data['totalDays']):
+            usAverageObject['cases'][i] += data['states'][state]['cases'][i]
+            usAverageObject['averages'][i] += data['states'][state]['averages'][i]
+    
+    # scale totals
+    for i in range(0, data['totalDays']):
+        usAverageObject['scaledCases'][i] = usAverageObject['cases'][i] * 100.0 / usAverageObject['population']
+        usAverageObject['scaledAverages'][i] = usAverageObject['averages'][i] * 100000.0 / usAverageObject['population']
+
+    data['states']['US Average'] = usAverageObject
     getMax('US Average', 'scaledCases')
     getMax('US Average', 'scaledAverages')
 
