@@ -64,10 +64,43 @@ def getMax(state, statistic):
     name = 'max' + statistic[0].upper() + statistic[1:]
     data['states'][state][name] = max
 
+# run after prepending zeros so that arrays are normalized
+def getUsAverages():
+    usAverage = [0] * data['totalDays']
+    usAverageNew = [0] * data['totalDays']
+    usPopulation = 0
+
+    # get totals
+    for state in data['states']:
+        usPopulation += data['states'][state]['population']
+        for i in range(0, data['totalDays']):
+            usAverage[i] += data['states'][state]['cases'][i]
+            usAverageNew[i] += data['states'][state]['averages'][i]
+    
+    # scale totals
+    for i in range(0, data['totalDays']):
+        usAverage[i] = usAverage[i] * 100.0 / usPopulation
+        usAverageNew[i] = usAverageNew[i] * 100000.0 / usPopulation
+
+    # create data object
+    data['states']['US Average'] = {
+        'cases': [],
+        'deaths': [],
+        'averages': [],
+        'scaledCases': usAverage,
+        'scaledAverages': usAverageNew,
+        'population': usPopulation,
+        'name': 'US Average'
+    }
+
+    getMax('US Average', 'scaledCases')
+    getMax('US Average', 'scaledAverages')
+
+
 def getMaxOverall(statistic):
     max = 0
     for state in data['states']:
-        if data['states'][state][statistic] > max:
+        if (statistic in data['states'][state] and data['states'][state][statistic] > max):
             max = data['states'][state][statistic]
     data[statistic] = max
 
@@ -106,6 +139,8 @@ for state in sorted(data['states'].keys()):
     getMax(state, 'averages')
     getMax(state, 'scaledCases')
     getMax(state, 'scaledAverages')
+
+getUsAverages()
 
 getMaxOverall('maxCases')
 getMaxOverall('maxDeaths')
