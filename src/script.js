@@ -90,7 +90,13 @@ var chartTitle = function (title) {
 var buildPaths = function (d, dataset, dataFunction) {
   svg.append('path')
     .attr('class', 'line')
-    .style('stroke', function () { return d.color = color(d.name); })
+    .style('stroke', function () { 
+      if (d.name != 'US Average') {
+        return d.color = color(d.name); 
+      }
+      // set US Average in CSS
+      return;
+    })
     .attr('id', 'line' + d.name.replace(/\s+/g, ''))
     .attr('d', dataFunction(dataset))
     .on('mouseover', function () { highlight(d); })

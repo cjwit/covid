@@ -59,6 +59,8 @@ svg {
 }
 
 #lineUSAverage {
-  stroke-dasharray: 10;
+  stroke: black;
   stroke-width: 4;
+  stroke-dasharray: 16;
+  opacity: 1;
 }

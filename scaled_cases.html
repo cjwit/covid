@@ -89,10 +89,15 @@
 
           // build the graph line and legend
           buildPaths(d, pairs, pathFunctionTime);
-          buildLegend(d, i);
+          
+          // adjust i for buildLegend after US Average
+          if (d.name < 'US Average') {
+            buildLegend(d, i);
+          }
+          else if (d.name > 'US Average') {
+            buildLegend(d, i - 1);
+          }
         });
-
-        document.getElementById("labelUSAverage").dispatchEvent(new Event('click'));
       });
 
     </script>
