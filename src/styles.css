@@ -13,7 +13,6 @@ svg {
   margin: 0 auto;
 }
 
-
 .axis path,
 .axis line {
     fill: none;
@@ -57,4 +56,9 @@ svg {
 .line.active {
   opacity: 1;
   stroke-width: 8;
+}
+
+#lineUSAverage {
+  stroke-dasharray: 10;
+  stroke-width: 4;
 }
