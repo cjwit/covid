@@ -34,6 +34,7 @@
     <script>
       svg = buildChart({ top: 30, right: 50, bottom: 320, left: 20 });
       chartTitle('Seven day rolling average per 100,000 of population');
+      chartTitle('US average shown as a dotted black line', 1);
 
       // Set the ranges
       var x = d3.time.scale().range([0, width]);

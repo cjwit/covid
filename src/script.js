@@ -77,11 +77,11 @@ var addAxes = function (x, y) {
     .call(yAxis)
 }
 
-// Create chart title
-var chartTitle = function (title) {
+// Create chart title, accept 0 based line number
+var chartTitle = function (title, lineNumber = 0) {
   svg.append('text')
     .attr('x', 10)
-    .attr('y', -10)
+    .attr('y', -10 + lineNumber * 20)
     .attr('class', 'title')
     .text(title)
 }

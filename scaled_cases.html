@@ -34,6 +34,7 @@
     <script>
       svg = buildChart({ top: 30, right: 50, bottom: 320, left: 60 });
       chartTitle('Total cases as a percentage of state population');
+      chartTitle('US average shown as a dotted black line', 1);
 
       // Set the ranges
       var x = d3.time.scale().range([0, width]);
@@ -89,7 +90,7 @@
 
           // build the graph line and legend
           buildPaths(d, pairs, pathFunctionTime);
-          
+
           // adjust i for buildLegend after US Average
           if (d.name < 'US Average') {
             buildLegend(d, i);
