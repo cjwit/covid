@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>COVID-19 statistics by US state: deaths - Witulski</title>
+  <link rel="stylesheet" href="src/bootstrap.min.css">
+  <link rel="stylesheet" href="src/styles.css">
+  <script src='src/d3.min.js'></script>
+  <script src='src/script.js'></script>
+</head>
+
+<body>
+  <div class="container" id="container">
+    <div class="page-header">
+      <h1>COVID-19 deaths by US states since their 10th reported death</h1>
+      <p>
+        Last updated on <span id="date">November 17, 2020</span> with data through <span id="lastData">November 16, 2020</span>. 
+      </p>
+      <p>
+        Click state names to show their graphs individually.
+        Works best on mobile if you turn the phone sideways.
+        Developed by <a href="https://cwitulski.com">Christopher Witulski</a>.
+      </p>
+      <p>
+        <a href="index.html" class="btn btn-primary">Total cases</a>
+        <a href='scaled_cases.html' class='btn btn-primary'>Cases by population</a>
+        <a href='deaths.html' class='btn btn-default'>Total deaths</a>
+        <a href='averages.html' class='btn btn-primary'>Daily new cases</a>
+        <a href='scaled_averages.html' class='btn btn-primary'>Daily new cases per 100k</a>
+      </p>
+    </div>
+
+    <script>
+
+      svg = buildChart({ top: 30, right: 50, bottom: 320, left: 60 });
+      chartTitle('Deaths, from 10th reported');
+
+      // Set the ranges
+      // Change Y to scale.linear() for linear scale
+      var x = d3.scale.linear().range([0, width]);
+      var y = d3.scale.log().range([height, 0]);
+
+      // build tooltips
+      var tooltip = d3.select("body")
+        .append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
+
+      var showTooltip = function (current) {
+        tooltip.transition()
+          .duration(100)
+          .style('opacity', .9);
+
+        tooltip.html(function () {
+          var lastDeath = Number(current.deaths[current.deaths.length - 1]);
+          return '<b>' + current.name + '</b> ' + lastDeath.toLocaleString() + ' total cases';
+        })
+          .style('left', (d3.event.pageX - 150) + 'px')
+          .style('top', (d3.event.pageY - 50) + 'px');
+      }
+
+      // Get the data
+      d3.json("data.json", function (error, data) {
+        delete data.states["US Average"];
+        
+        // Dynamically scale the range of the data
+        var daysOver10 = data.states['Washington'].cases.filter(
+          function (n) { return n >= 10; })
+          .length
+        x.domain([0, daysOver10]);
+        y.domain([10, data.maxDeaths]);
+
+        addAxes(x, y);
+
+        // sort data and loop through each state
+        var stateData = Object.entries(data.states).sort(
+          function (a, b) { return a[0] > b[0]; }
+        );
+
+        stateData.forEach(function (d, i) {
+          // get object from iterator array
+          d = d[1];
+
+          // filter deaths to show only 10+
+          d.deaths = d.deaths.filter(function (num) { return num >= 10; });
+
+          // build the graph line and legend
+          buildPaths(d, d.deaths, pathFunctionLinear);
+          buildLegend(d, i);
+        });
+      });
+
+    </script>
+
+    <p>
+      This chart tracks deaths from COVID-19 across the USA from the date when each state first had at least 10
+      reported.
+      The data comes from the New York Times (see <a
+        href='https://www.nytimes.com/article/coronavirus-county-data-us.html?action=click&module=Spotlight&pgtype=Homepage'>here
+        for more information</a> and <a href='https://github.com/nytimes/covid-19-data'>here for the GitHub data</a>).
+      The
+      idea for the chart comes from <a
+        href="https://ourworldindata.org/grapher/covid-confirmed-cases-since-100th-case">this similar one from Our World
+        in Data</a>.
+    </p>
+    <p>
+      I wouldn't depend on this for much, it's mostly a chance for me to see a graph that I wish were easier to find
+      while
+      checking to see if I remember how to use D3.js.
+    </p>
+  </div>
+  <script data-goatcounter="https://witulski.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
