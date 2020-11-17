@@ -1,6 +1,7 @@
 import Chart from "./src/Chart.js";
 
-var chart = new Chart({ top: 30, right: 50, bottom: 320, left: 60 });
+console.log("script");
+var chart = new Chart('Cases, from 100th reported', { top: 30, right: 50, bottom: 320, left: 60 });
 
 // /*
 //  *
@@ -8,7 +9,6 @@ var chart = new Chart({ top: 30, right: 50, bottom: 320, left: 60 });
 //  * 
 //  */
 
-// chartTitle('Cases, from 100th reported');
 
 
 // // Set the ranges
@@ -136,14 +136,6 @@ var chart = new Chart({ top: 30, right: 50, bottom: 320, left: 60 });
 //         .call(yAxis)
 // }
 
-// // Create chart title, accept 0 based line number
-// var chartTitle = function(title, lineNumber = 0) {
-//     svg.append('text')
-//         .attr('x', 10)
-//         .attr('y', -10 + lineNumber * 20)
-//         .attr('class', 'title')
-//         .text(title)
-// }
 
 // // build graph data lines
 // var buildPaths = function(d, dataset, dataFunction) {
