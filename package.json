@@ -1,0 +1,28 @@
+{
+  "name": "covid",
+  "version": "1.0.0",
+  "description": "This chart tracks cases of COVID-19 across the USA from the date when each state first had at least 100 reported cases. The data comes from the New York Times (see [here for more information](https://www.nytimes.com/article/coronavirus-county-data-us.html?action=click&module=Spotlight&pgtype=Homepage) and [here for the GitHub data](https://github.com/nytimes/covid-19-data)). The idea for the chart comes from [this similar one from Our World in Data](https://ourworldindata.org/grapher/covid-confirmed-cases-since-100th-case).",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "webpack": "npx webpack",
+    "firefox": "open -a Firefox ./dist/index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cjwit/covid.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cjwit/covid/issues"
+  },
+  "homepage": "https://github.com/cjwit/covid#readme",
+  "devDependencies": {
+    "sass": "^1.29.0",
+    "sass-loader": "^10.1.0",
+    "source-map-loader": "^1.1.2",
+    "webpack": "^5.5.0",
+    "webpack-cli": "^4.2.0"
+  }
+}
