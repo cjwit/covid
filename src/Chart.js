@@ -142,7 +142,7 @@ export default class Chart {
       .attr('class', 'line')
       .style('stroke', function () {
         if (d.name != 'US Average') {
-          return d.color = this.color(d.name);
+          return d.color = self.color(d.name);
         }
         // set US Average in CSS
         return;
@@ -163,30 +163,32 @@ export default class Chart {
 
   // from script
   buildLegend(d, i) {
-    var legendWidthSpacing = width / 4
+    var legendWidthSpacing = this.width / 4
+    var self = this;
+
     d.active = false
     this.svg.append('text')
       .attr('x', (legendWidthSpacing / 2 + Math.floor(i / 14) * legendWidthSpacing))
       .attr('y', this.height + 40 + (i % 14 * 20))
       .attr('class', 'legend')
       .attr('id', 'label' + d.name.replace(/\s+/g, ''))
-      .style('fill', function () { return d.color = this.color(d.name); })
+      .style('fill', function () { return d.color = self.color(d.name); })
       .text(d.name)
       .on('mouseover', function () {
-        if (!d.active) { this.setActive(d.name, true); }
+        if (!d.active) { self.setActive(d.name, true); }
       })
       .on('mouseout', function () {
-        if (!d.active) { this.setActive(d.name, false); }
+        if (!d.active) { self.setActive(d.name, false); }
       })
       .on('click', function () {
-        if (!d.active) { this.setActive(d.name, true); } else { this.setActive(d.name, false); }
+        if (!d.active) { self.setActive(d.name, true); } else { self.setActive(d.name, false); }
         d.active = !d.active
       });
   }
 
   // from script
   color(name) {
-    return d3.scale.category10()(name);
+    return d3.scale.category10(name);
   }
 
   // from script
