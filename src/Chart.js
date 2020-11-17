@@ -136,12 +136,18 @@ export default class Chart {
 
   // from script
   buildPaths(d, dataset) {
-    console.log(d.name, dataset);
+
+    var x = this.x;
+    var y = this.y;
+    var valueLine = d3.svg.line()
+      .x(function(d, i) { return x(i); })
+      .y(function(d) { return y(d); });
+  
+
     var self = this;
     this.svg.append('path')
       .attr('class', 'line')
       .style('stroke', function () {
-        console.log("color", d.name, self.color(d.name));
         if (d.name != 'US Average') {
           return d.color = self.color(d.name);
         }
@@ -149,18 +155,22 @@ export default class Chart {
         return;
       })
       .attr('id', 'line' + d.name.replace(/\s+/g, ''))
-      .attr('d', this.pathDataFunction(dataset))
+      // .attr('d', this.pathDataFunction(dataset))
+      .attr('d', valueLine(dataset))
       .on('mouseover', function () { self.highlight(d); })
       .on('mouseout', function () { self.removeHighlight(d); });
   }
 
   // from script, linear, should overwrite in time charts
-  pathDataFunction(d) {
-    var self = this;
-    d3.svg.line()
-      .x(function (d, i) { return self.x(i); })
-      .y(function (d) { return self.y(d); });
-  }
+  // pathDataFunction(d) {
+
+  //   console.log(d);
+
+  //   var self = this;
+  //   return d3.svg.line()
+  //     .x(function (d, i) { return self.x(i); })
+  //     .y(function (d) { return self.y(d); });
+  // }
 
   // from script
   buildLegend(d, i) {
