@@ -139,11 +139,12 @@ export default class Chart {
 
     var x = this.x;
     var y = this.y;
+
+    // linear graph, needs changing for time axis
     var valueLine = d3.svg.line()
       .x(function(d, i) { return x(i); })
       .y(function(d) { return y(d); });
   
-
     var self = this;
     this.svg.append('path')
       .attr('class', 'line')
@@ -160,17 +161,6 @@ export default class Chart {
       .on('mouseover', function () { self.highlight(d); })
       .on('mouseout', function () { self.removeHighlight(d); });
   }
-
-  // from script, linear, should overwrite in time charts
-  // pathDataFunction(d) {
-
-  //   console.log(d);
-
-  //   var self = this;
-  //   return d3.svg.line()
-  //     .x(function (d, i) { return self.x(i); })
-  //     .y(function (d) { return self.y(d); });
-  // }
 
   // from script
   buildLegend(d, i) {
