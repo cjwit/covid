@@ -14,6 +14,7 @@ export default class Chart {
     // set ranges
     this.x = d3.scale.linear().range([0, this.width]);
     this.y = d3.scale.log().range([this.height, 0]);
+    this.color = d3.scale.category10();
 
     // build tooltips
     this.tooltip = d3.select('body')
@@ -106,8 +107,6 @@ export default class Chart {
     })
   }
     
-
-
   // from script
   addAxes() {
     // Define the axis
@@ -137,10 +136,12 @@ export default class Chart {
 
   // from script
   buildPaths(d, dataset) {
+    console.log(d.name, dataset);
     var self = this;
     this.svg.append('path')
       .attr('class', 'line')
       .style('stroke', function () {
+        console.log("color", d.name, self.color(d.name));
         if (d.name != 'US Average') {
           return d.color = self.color(d.name);
         }
@@ -184,11 +185,6 @@ export default class Chart {
         if (!d.active) { self.setActive(d.name, true); } else { self.setActive(d.name, false); }
         d.active = !d.active
       });
-  }
-
-  // from script
-  color(name) {
-    return d3.scale.category10(name);
   }
 
   // from script
