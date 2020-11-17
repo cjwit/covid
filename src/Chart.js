@@ -64,11 +64,19 @@ export default class Chart {
       .style('top', (d3.event.pageY - 60) + 'px');
   }
 
+  async getData() {
+    return new Promise((resolve, reject) => {
+      d3.json('data.json', function (error, data) {
+        delete data.states["US Average"];
+        resolve(data);
+      });
+    })
+  }
+    
   async addData() {
     this.data = await this.getData();
-    console.log('addData', this.data);
 
-        // work into functions
+    // work into functions
     // Dynamically scale the range of the data using Washington (where first cases appear)
     var daysOver100 = this.data.states['Washington'].cases.filter(
       function (n) { return n >= 100; })
@@ -83,30 +91,11 @@ export default class Chart {
       function (a, b) { return a[0] > b[0]; }
     );
     
-    var self = this;
-    stateData.forEach(function (d, i) {
-      // get object from iterator array
-      d = d[1];
-
-      // filter cases to show only 100+
-      d.cases = d.cases.filter(function (num) { return num >= 100; });
-
-      // build the graph line and legend
-      self.buildPaths(d, d.cases);
-      self.buildLegend(d, i);
-    });
-
+    for (let i = 0; i < stateData.length; i++) {
+      this.addState(stateData[i], i);
+    }
   }
 
-  async getData() {
-    return new Promise((resolve, reject) => {
-      d3.json('data.json', function (error, data) {
-        delete data.states["US Average"];
-        resolve(data);
-      });
-    })
-  }
-    
   // from script
   addAxes() {
     // Define the axis
@@ -134,6 +123,18 @@ export default class Chart {
       .call(yAxis)
   }
 
+  addState(d, position) {
+      // get object from iterator array
+      d = d[1];
+
+      // filter cases to show only 100+
+      d.cases = d.cases.filter(function (num) { return num >= 100; });
+
+      // build the graph line and legend
+      this.buildPaths(d, d.cases);
+      this.buildLegend(d, position);
+  }
+  
   // from script
   buildPaths(d, dataset) {
 
