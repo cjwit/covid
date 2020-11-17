@@ -66,7 +66,7 @@ export default class Chart {
 
   async getData() {
     return new Promise((resolve, reject) => {
-      d3.json('data.json', function (error, data) {
+      d3.json('assets/data.json', function (error, data) {
         delete data.states["US Average"];
         resolve(data);
       });
