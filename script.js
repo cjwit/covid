@@ -1,6 +1,8 @@
-import Chart from "./src/Chart.js";
+// import Chart from "./src/Chart.js";
+import LogLinearChart from "./src/LogLinearChart.js";
 
-window.Chart = Chart;
+// window.Chart = Chart;
+window.LogLinearChart = LogLinearChart;
 
 // /*
 //  *

@@ -1,6 +1,6 @@
 import "./d3.min.js";
 
-export default class Chart {
+export class Chart {
   constructor(title, margin) {
 
     // set the dimensions of the chart canvas
@@ -13,7 +13,7 @@ export default class Chart {
 
     // set ranges
     this.setRanges();
-    
+
     // build tooltips
     this.tooltip = d3.select('body')
       .append('div')
@@ -26,11 +26,7 @@ export default class Chart {
     return this.svg;
   }
 
-  setRanges() {
-    this.x = d3.scale.linear().range([0, this.width]);
-    this.y = d3.scale.log().range([this.height, 0]);
-    this.color = d3.scale.category10();
-  }
+  setRanges() {}
 
   createSVG(margin) {
     return d3.select('#chart')
@@ -84,15 +80,7 @@ export default class Chart {
     this.addStates();
   }
 
-  setDomain() {
-    // Dynamically scale the range of the data 
-    // using Washington (where first cases appear)
-    var daysOver100 = this.data.states['Washington'].cases.filter(
-      function (n) { return n >= 100; })
-      .length
-    this.x.domain([0, daysOver100]);
-    this.y.domain([100, this.data.maxCases]);
-  }
+  setDomain() {}
 
   // from script
   addAxes() {
@@ -129,14 +117,14 @@ export default class Chart {
     for (let i = 0; i < stateData.length; i++) {
       let stateDataObject = stateData[i][1];
 
-      // filter cases to show only 100+
-      stateDataObject.cases = stateDataObject.cases
-        .filter(function (num) { return num >= 100; });
+      stateDataObject = this.filterStates(stateDataObject);
 
       this.buildPaths(stateDataObject);
       this.buildLegend(stateDataObject, i);
     }
   }
+
+  filterStates(stateDataObject) {}
 
   // from script
   buildPaths(d) {
