@@ -1,8 +1,10 @@
 // import Chart from "./src/Chart.js";
-import LinearLogChart from "./src/LinearLogChart.js";
+import CasesChart from "./src/CasesChart.js";
+import DeathsChart from "./src/DeathsChart.js";
 
 // window.Chart = Chart;
-window.LinearLogChart = LinearLogChart;
+window.CasesChart = CasesChart;
+window.DeathsChart = DeathsChart;
 
 // /*
 //  *

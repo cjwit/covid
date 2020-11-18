@@ -47,30 +47,6 @@ export class Chart {
       .text(title);
   }
 
-  // specific to the graph... needs changed
-  showTooltip(current) {
-    this.tooltip.transition()
-      .duration(100)
-      .style('opacity', .9);
-
-    this.tooltip.html(function () {
-      var lastCase = Number(current.cases[current.cases.length - 1]);
-      var scaled = Math.round(lastCase * 100000.0 / current.population).toLocaleString();
-      return '<b>' + current.name + '</b> ' + lastCase.toLocaleString() + ' total cases</br> ' + scaled + ' per 100,000k';
-    })
-      .style('left', (d3.event.pageX - 150) + 'px')
-      .style('top', (d3.event.pageY - 60) + 'px');
-  }
-
-  async getData() {
-    return new Promise((resolve, reject) => {
-      d3.json('assets/data.json', function (error, data) {
-        delete data.states["US Average"];
-        resolve(data);
-      });
-    })
-  }
-
   async addData() {
     this.data = await this.getData();
 
@@ -82,7 +58,15 @@ export class Chart {
 
   setDomain() {}
 
-  // from script
+  async getData() {
+    return new Promise((resolve, reject) => {
+      d3.json('assets/data.json', function (error, data) {
+        delete data.states["US Average"];
+        resolve(data);
+      });
+    })
+  }
+
   addAxes() {
     // Define the axis
     var xAxis = d3.svg.axis()
@@ -119,43 +103,20 @@ export class Chart {
 
       stateDataObject = this.filterStates(stateDataObject);
 
-      this.buildPaths(stateDataObject);
+      this.buildPath(stateDataObject, i);
       this.buildLegend(stateDataObject, i);
     }
   }
 
+  // adjust filter values
   filterStates(stateDataObject) {}
 
-  // from script
-  buildPaths(d) {
+  // adjust path function
+  buildPath(d, i) {}
 
-    // setup variables for anonymous functions
-    var self = this;
-    var x = this.x;
-    var y = this.y;
+  // adjust data used to calculate y
+  appendPath(d, pathFunction) {}
 
-    // linear graph, needs changing for time axis
-    var valueLine = d3.svg.line()
-      .x(function (d, i) { return x(i); })
-      .y(function (d) { return y(d); });
-
-    this.svg.append('path')
-      .attr('class', 'line')
-      .style('stroke', function () {
-        if (d.name != 'US Average') {
-          return d.color = self.color(d.name);
-        }
-        // set US Average in CSS
-        return;
-      })
-      .attr('id', 'line' + d.name.replace(/\s+/g, ''))
-      // .attr('d', this.pathDataFunction(dataset))
-      .attr('d', valueLine(d.cases))
-      .on('mouseover', function () { self.highlight(d); })
-      .on('mouseout', function () { self.removeHighlight(d); });
-  }
-
-  // from script
   buildLegend(d, i) {
     var legendWidthSpacing = this.width / 4
     var self = this;
@@ -179,6 +140,8 @@ export class Chart {
         d.active = !d.active
       });
   }
+
+  showTooltip(current) {}
 
   // from script
   setActive(name, value) {

@@ -4,10 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>COVID-19 statistics by US state: deaths - Witulski</title>
-  <link rel="stylesheet" href="src/bootstrap.min.css">
-  <link rel="stylesheet" href="src/styles.css">
-  <script src='src/d3.min.js'></script>
-  <script src='src/script.js'></script>
+  <link rel="stylesheet" href="assets/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/styles.css">
 </head>
 
 <body>
@@ -31,67 +29,7 @@
       </p>
     </div>
 
-    <script>
-
-      svg = buildChart({ top: 30, right: 50, bottom: 320, left: 60 });
-      chartTitle('Deaths, from 10th reported');
-
-      // Set the ranges
-      // Change Y to scale.linear() for linear scale
-      var x = d3.scale.linear().range([0, width]);
-      var y = d3.scale.log().range([height, 0]);
-
-      // build tooltips
-      var tooltip = d3.select("body")
-        .append("div")
-        .attr("class", "tooltip")
-        .style("opacity", 0);
-
-      var showTooltip = function (current) {
-        tooltip.transition()
-          .duration(100)
-          .style('opacity', .9);
-
-        tooltip.html(function () {
-          var lastDeath = Number(current.deaths[current.deaths.length - 1]);
-          return '<b>' + current.name + '</b> ' + lastDeath.toLocaleString() + ' total cases';
-        })
-          .style('left', (d3.event.pageX - 150) + 'px')
-          .style('top', (d3.event.pageY - 50) + 'px');
-      }
-
-      // Get the data
-      d3.json("data.json", function (error, data) {
-        delete data.states["US Average"];
-        
-        // Dynamically scale the range of the data
-        var daysOver10 = data.states['Washington'].cases.filter(
-          function (n) { return n >= 10; })
-          .length
-        x.domain([0, daysOver10]);
-        y.domain([10, data.maxDeaths]);
-
-        addAxes(x, y);
-
-        // sort data and loop through each state
-        var stateData = Object.entries(data.states).sort(
-          function (a, b) { return a[0] > b[0]; }
-        );
-
-        stateData.forEach(function (d, i) {
-          // get object from iterator array
-          d = d[1];
-
-          // filter deaths to show only 10+
-          d.deaths = d.deaths.filter(function (num) { return num >= 10; });
-
-          // build the graph line and legend
-          buildPaths(d, d.deaths, pathFunctionLinear);
-          buildLegend(d, i);
-        });
-      });
-
-    </script>
+    <div id="chart"></div>
 
     <p>
       This chart tracks deaths from COVID-19 across the USA from the date when each state first had at least 10
@@ -110,5 +48,10 @@
       checking to see if I remember how to use D3.js.
     </p>
   </div>
+  <script src='assets/script.js'></script>
+  <script>
+    var margin = { top: 30, right: 50, bottom: 320, left: 60 };
+    var chart = new window.DeathsChart('Deaths, from 10th reported', margin);
+  </script>
   <script data-goatcounter="https://witulski.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
