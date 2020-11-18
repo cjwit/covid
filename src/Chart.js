@@ -9,7 +9,16 @@ export class Chart {
 
     // create svg element    
     this.svg = this.createSVG(margin);
-    this.createChartTitle(title)
+
+    // create chart title (allow for multiple lines)
+    if (typeof title == "object") {
+      for (let i = 0; i < title.length; i++) {
+        this.createChartTitle(title[i], i);
+      }
+    } else {
+      this.createChartTitle(title)
+    }
+
 
     // set ranges
     this.setRanges();
