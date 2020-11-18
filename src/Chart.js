@@ -12,10 +12,8 @@ export default class Chart {
     this.createChartTitle(title)
 
     // set ranges
-    this.x = d3.scale.linear().range([0, this.width]);
-    this.y = d3.scale.log().range([this.height, 0]);
-    this.color = d3.scale.category10();
-
+    this.setRanges();
+    
     // build tooltips
     this.tooltip = d3.select('body')
       .append('div')
@@ -26,6 +24,12 @@ export default class Chart {
     this.addData();
 
     return this.svg;
+  }
+
+  setRanges() {
+    this.x = d3.scale.linear().range([0, this.width]);
+    this.y = d3.scale.log().range([this.height, 0]);
+    this.color = d3.scale.category10();
   }
 
   createSVG(margin) {
@@ -45,8 +49,6 @@ export default class Chart {
       .attr('y', -10 + lineNumber * 20)
       .attr('class', 'title')
       .text(title);
-
-    return;
   }
 
   // specific to the graph... needs changed
@@ -72,28 +74,24 @@ export default class Chart {
       });
     })
   }
-    
+
   async addData() {
     this.data = await this.getData();
 
-    // work into functions
-    // Dynamically scale the range of the data using Washington (where first cases appear)
+    // complete setup after data is parsed
+    this.setDomain();
+    this.addAxes();
+    this.addStates();
+  }
+
+  setDomain() {
+    // Dynamically scale the range of the data 
+    // using Washington (where first cases appear)
     var daysOver100 = this.data.states['Washington'].cases.filter(
       function (n) { return n >= 100; })
       .length
     this.x.domain([0, daysOver100]);
     this.y.domain([100, this.data.maxCases]);
-
-    this.addAxes();
-
-    // sort data and loop through each state
-    var stateData = Object.entries(this.data.states).sort(
-      function (a, b) { return a[0] > b[0]; }
-    );
-    
-    for (let i = 0; i < stateData.length; i++) {
-      this.addState(stateData[i], i);
-    }
   }
 
   // from script
@@ -123,30 +121,36 @@ export default class Chart {
       .call(yAxis)
   }
 
-  addState(d, position) {
-      // get object from iterator array
-      d = d[1];
+  addStates() {
+    var stateData = Object.entries(this.data.states).sort(
+      function (a, b) { return a[0] > b[0]; }
+    );
+
+    for (let i = 0; i < stateData.length; i++) {
+      let stateDataObject = stateData[i][1];
 
       // filter cases to show only 100+
-      d.cases = d.cases.filter(function (num) { return num >= 100; });
+      stateDataObject.cases = stateDataObject.cases
+        .filter(function (num) { return num >= 100; });
 
-      // build the graph line and legend
-      this.buildPaths(d, d.cases);
-      this.buildLegend(d, position);
+      this.buildPaths(stateDataObject);
+      this.buildLegend(stateDataObject, i);
+    }
   }
-  
-  // from script
-  buildPaths(d, dataset) {
 
+  // from script
+  buildPaths(d) {
+
+    // setup variables for anonymous functions
+    var self = this;
     var x = this.x;
     var y = this.y;
 
     // linear graph, needs changing for time axis
     var valueLine = d3.svg.line()
-      .x(function(d, i) { return x(i); })
-      .y(function(d) { return y(d); });
-  
-    var self = this;
+      .x(function (d, i) { return x(i); })
+      .y(function (d) { return y(d); });
+
     this.svg.append('path')
       .attr('class', 'line')
       .style('stroke', function () {
@@ -158,7 +162,7 @@ export default class Chart {
       })
       .attr('id', 'line' + d.name.replace(/\s+/g, ''))
       // .attr('d', this.pathDataFunction(dataset))
-      .attr('d', valueLine(dataset))
+      .attr('d', valueLine(d.cases))
       .on('mouseover', function () { self.highlight(d); })
       .on('mouseout', function () { self.removeHighlight(d); });
   }
