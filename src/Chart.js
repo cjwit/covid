@@ -70,14 +70,13 @@ export class Chart {
   async getData() {
     return new Promise((resolve, reject) => {
       d3.json('assets/data.json', function (error, data) {
-        delete data.states["US Average"];
         resolve(data);
       });
     })
   }
 
   addAxes() {
-    // Define the axis
+    // Define the axes
     var xAxis = d3.svg.axis()
       .scale(this.x)
       .orient('bottom')
@@ -91,7 +90,7 @@ export class Chart {
       .tickFormat(function (d) { return self.y.tickFormat(5, d3.format(',d'))(d) })
       .ticks(5);
 
-    // Add axis
+    // append axes
     this.svg.append('g')
       .attr('class', 'x axis')
       .attr('transform', 'translate(0,' + this.height + ')')
@@ -150,9 +149,9 @@ export class Chart {
       });
   }
 
+  // adjust tooltip text
   showTooltip(current) {}
 
-  // from script
   setActive(name, value) {
     d3.select('#label' + name.replace(/\s+/g, ''))
       .classed('active', value);
@@ -160,13 +159,11 @@ export class Chart {
       .classed('active', value);
   }
 
-  // from script
   highlight(current) {
     this.setActive(current.name, true);
     this.showTooltip(current);
   }
 
-  // from script
   removeHighlight(current) {
     this.tooltip.transition()
       .duration(100)

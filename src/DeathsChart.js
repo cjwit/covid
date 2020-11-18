@@ -23,6 +23,16 @@ export default class DeathsChart extends Chart {
     this.y.domain([10, this.data.maxDeaths]);
   }
 
+  // override to remove average
+  async getData() {
+    return new Promise((resolve, reject) => {
+      d3.json('assets/data.json', function (error, data) {
+        delete data.states["US Average"];
+        resolve(data);
+      });
+    })
+  }
+
   filterStates(stateDataObject) {
     // filter cases to show only 100
     stateDataObject.deaths = stateDataObject.deaths

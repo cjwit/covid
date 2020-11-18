@@ -21,15 +21,6 @@ export default class CasesScaledChart extends Chart {
     this.y.domain([0, this.data.maxScaledCases]);
   }
 
-  
-  async getData() {
-    return new Promise((resolve, reject) => {
-      d3.json('assets/data.json', function (error, data) {
-        resolve(data);
-      });
-    })
-  }
-
   filterStates(stateDataObject) {
     // filter cases to show only 100
     stateDataObject.cases = stateDataObject.cases
