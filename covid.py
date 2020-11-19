@@ -145,7 +145,7 @@ getMaxOverall('maxScaledCases')
 getMaxOverall('maxScaledAverages')
 
 # write object to file as JSON
-with open('data.json', 'w') as output:
+with open('dist/assets/data.json', 'w') as output:
     json.dump(data, output)
 
 # set dates in html files
@@ -170,8 +170,4 @@ def updateDate(filename):
     outFile.write(inContents)
     outFile.close()
 
-updateDate("index.html")
-updateDate("scaled_cases.html")
-updateDate("deaths.html")
-updateDate("averages.html")
-updateDate("scaled_averages.html")
+updateDate("dist/index.html")
