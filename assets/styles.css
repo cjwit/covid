@@ -8,6 +8,14 @@ body {
   margin-bottom: .4rem;
 }
 
+.chart {
+  display: none;
+}
+
+#cases {
+  display: block;
+}
+
 svg {
   display: block;
   margin: 0 auto;

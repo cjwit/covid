@@ -21,19 +21,19 @@
         Developed by <a href='https://cwitulski.com'>Christopher Witulski</a>.
       </p>
       <p>
-        <a href="index.html" class="btn btn-default">Total cases</a>
-        <a href='scaled_cases.html' class='btn btn-primary'>Cases by population</a>
-        <a href='deaths.html' class='btn btn-primary'>Total deaths</a>
-        <a href='averages.html' class='btn btn-primary'>Daily new cases</a>
-        <a href='scaled_averages.html' class='btn btn-primary'>Daily new cases per 100k</a>
+        <span id="casesButton" class="btn btn-default">Total cases</span>
+        <span id="casesScaledButton" class='btn btn-primary'>Cases by population</span>
+        <span id="deathsButton" class='btn btn-primary'>Total deaths</span>
+        <span id="dailyButton" class='btn btn-primary'>Daily new cases</span>
+        <span id="dailyScaledButton" class='btn btn-primary'>Daily new cases per 100k</span>
       </p>
     </div>
 
-    <div id="cases"></div>
-    <div id="casesScaled"></div>
-    <div id="deaths"></div>
-    <div id="daily"></div>
-    <div id="dailyScaled"></div>
+    <div id="cases" class="chart"></div>
+    <div id="casesScaled" class="chart"></div>
+    <div id="deaths" class="chart"></div>
+    <div id="daily" class="chart"></div>
+    <div id="dailyScaled" class="chart"></div>
 
     <p>
       This chart tracks cases of COVID-19 across the USA from the date when each state first had at least 100 reported
