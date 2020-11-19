@@ -31,6 +31,9 @@
 
     <div id="cases"></div>
     <div id="casesScaled"></div>
+    <div id="deaths"></div>
+    <div id="daily"></div>
+    <div id="dailyScaled"></div>
 
     <p>
       This chart tracks cases of COVID-19 across the USA from the date when each state first had at least 100 reported
@@ -56,6 +59,15 @@
 
     var casesScaledMargin = { top: 30, right: 50, bottom: 320, left: 60 };
     var casesScaled = new window.CasesScaledChart('casesScaled', ['Total cases as a percentage of state population', 'US average shown as a dotted black line'], casesScaledMargin);
+
+    var deathsMargin = { top: 30, right: 50, bottom: 320, left: 60 };
+    var deaths = new window.DeathsChart('deaths', 'Deaths, from 10th reported', deathsMargin);
+
+    var dailyMargin = { top: 30, right: 50, bottom: 320, left: 60 };
+    var daily = new window.DailyChart('daily', 'Seven day rolling average', dailyMargin);
+
+    var dailyScaledMargin = { top: 30, right: 50, bottom: 320, left: 30 };
+    var dailyScaled = new window.DailyScaledChart('dailyScaled', ['Seven day rolling average per 100,000 of population', 'US average shown as a dotted black line'], dailyScaledMargin);
 
   </script>
   <script data-goatcounter='https://witulski.goatcounter.com/count' async src='//gc.zgo.at/count.js'></script>

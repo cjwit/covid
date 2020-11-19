@@ -2,8 +2,8 @@ import "./d3.min.js";
 import { Chart } from "./Chart.js";
 
 export default class DailyScaledChart extends Chart {
-  constructor(title, margin) {
-    super(title, margin);
+  constructor(id, title, margin) {
+    super(id, title, margin);
   }
 
   setRanges() {
@@ -64,7 +64,7 @@ export default class DailyScaledChart extends Chart {
         // set US Average in CSS
         return;
       })
-      .attr('id', 'line' + d.name.replace(/\s+/g, ''))
+      .attr('id', 'line-' + self.id + "-" + d.name.replace(/\s+/g, ''))
       // .attr('d', this.pathDataFunction(dataset))
       .attr('d', pathFunction(pairs))
       .on('mouseover', function () { self.highlight(d); })
