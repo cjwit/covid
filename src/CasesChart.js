@@ -1,8 +1,7 @@
 import "./d3.min.js";
 import { Chart } from "./Chart.js";
 
-
-export default class LogLinearChart extends Chart {
+export default class CasesChart extends Chart {
   constructor(title, margin) {
     super(title, margin);
   }

@@ -19,7 +19,6 @@ export class Chart {
       this.createChartTitle(title)
     }
 
-
     // set ranges
     this.setRanges();
 

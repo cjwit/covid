@@ -1,7 +1,6 @@
 import "./d3.min.js";
 import { Chart } from "./Chart.js";
 
-
 export default class DailyChart extends Chart {
   constructor(title, margin) {
     super(title, margin);

@@ -1,7 +1,7 @@
 import "./d3.min.js";
 import { Chart } from "./Chart.js";
 
-export default class CasesScaledChart extends Chart {
+export default class DailyScaledChart extends Chart {
   constructor(title, margin) {
     super(title, margin);
   }
@@ -17,7 +17,7 @@ export default class CasesScaledChart extends Chart {
     this.dayOne = new Date(2020, 0, 21);
     var yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
     this.x.domain([this.dayOne, yesterday]);
-    this.y.domain([0, this.data.maxScaledCases]);
+    this.y.domain([0, this.data.maxScaledAverages]);
   }
 
   filterStates(stateDataObject) {
@@ -47,7 +47,7 @@ export default class CasesScaledChart extends Chart {
     var pairs = [];
     for (var day = 0; day < this.data.totalDays; day++) {
       let currentDay = new Date(this.dayOne.valueOf() + day * 24 * 60 * 60 * 1000);
-      pairs.push({ "date": currentDay, "y": d.scaledCases[day] });
+      pairs.push({ "date": currentDay, "y": d.scaledAverages[day] });
     };
     return pairs;
   }
@@ -77,10 +77,10 @@ export default class CasesScaledChart extends Chart {
       .style('opacity', .9);
 
     this.tooltip.html(function () {
-      var lastScaled = Number(current.scaledCases[current.scaledCases.length - 1]);
-      var roundedLastScaled = Math.round(lastScaled * 100) / 100;
-      var totalCases = current.cases[current.cases.length - 1].toLocaleString();
-      return '<b>' + current.name + '</b> ' + roundedLastScaled.toLocaleString() + '% of population</br> ' + totalCases + ' total cases';
+      return "<b>" + current.name +
+        "</b> max: " + Math.round(current.maxScaledAverages).toLocaleString() +
+        " current: " + Math.round(Number(current.scaledAverages[current.scaledAverages.length - 1])).toLocaleString() +
+        "<br>yesterday's cases: " + Math.round(current.averages[current.averages.length - 1] * 100000.0 / current.population).toLocaleString();
     })
       .style('left', (d3.event.pageX - 150) + 'px')
       .style('top', (d3.event.pageY - 60) + 'px');
