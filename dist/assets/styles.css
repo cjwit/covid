@@ -15,10 +15,10 @@ svg {
 
 .axis path,
 .axis line {
-    fill: none;
-    stroke: lightgrey;
-    stroke-width: 1;
-    shape-rendering: crispEdges;
+  fill: none;
+  stroke: lightgrey;
+  stroke-width: 1;
+  shape-rendering: crispEdges;
 }
 
 .title {

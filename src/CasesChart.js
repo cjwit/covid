@@ -2,8 +2,8 @@ import "./d3.min.js";
 import { Chart } from "./Chart.js";
 
 export default class CasesChart extends Chart {
-  constructor(title, margin) {
-    super(title, margin);
+  constructor(id, title, margin) {
+    super(id, title, margin);
   }
 
   setRanges() {
@@ -66,7 +66,7 @@ export default class CasesChart extends Chart {
         // set US Average in CSS
         return;
       })
-      .attr('id', 'line' + d.name.replace(/\s+/g, ''))
+      .attr('id', 'line-' + this.id + "-" + d.name.replace(/\s+/g, ''))
       // .attr('d', this.pathDataFunction(dataset))
       .attr('d', pathFunction(d.cases))
       .on('mouseover', function () { self.highlight(d); })

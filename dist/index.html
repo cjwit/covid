@@ -29,7 +29,8 @@
       </p>
     </div>
 
-    <div id="chart"></div>
+    <div id="cases"></div>
+    <div id="casesScaled"></div>
 
     <p>
       This chart tracks cases of COVID-19 across the USA from the date when each state first had at least 100 reported
@@ -49,8 +50,13 @@
   </div>
   <script src='assets/script.js'></script>
   <script>
-    var margin = { top: 30, right: 50, bottom: 320, left: 80 };
-    var chart = new window.CasesChart('Cases, from 100th reported', margin);
+
+    var casesMargin = { top: 30, right: 50, bottom: 320, left: 80 };
+    var cases = new window.CasesChart('cases', 'Cases, from 100th reported', casesMargin);
+
+    var casesScaledMargin = { top: 30, right: 50, bottom: 320, left: 60 };
+    var casesScaled = new window.CasesScaledChart('casesScaled', ['Total cases as a percentage of state population', 'US average shown as a dotted black line'], casesScaledMargin);
+
   </script>
   <script data-goatcounter='https://witulski.goatcounter.com/count' async src='//gc.zgo.at/count.js'></script>
 </body>

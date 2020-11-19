@@ -1,14 +1,15 @@
 import "./d3.min.js";
 
 export class Chart {
-  constructor(title, margin) {
+  constructor(id, title, margin) {
+    this.id = id;
 
     // set the dimensions of the chart canvas
     this.width = 800 - margin.left - margin.right;
     this.height = 800 - margin.top - margin.bottom;
-
+    
     // create svg element    
-    this.svg = this.createSVG(margin);
+    this.svg = this.createSVG(id, margin);
 
     // create chart title (allow for multiple lines)
     if (typeof title == "object") {
@@ -36,8 +37,9 @@ export class Chart {
 
   setRanges() {}
 
-  createSVG(margin) {
-    return d3.select('#chart')
+  createSVG(id, margin) {
+    console.log(id)
+    return d3.select('#' + id)
       .append('svg')
       .attr('width', '100%')
       .attr('viewBox', '0 0 800 800')
@@ -133,7 +135,7 @@ export class Chart {
       .attr('x', (legendWidthSpacing / 2 + Math.floor(i / 14) * legendWidthSpacing))
       .attr('y', this.height + 40 + (i % 14 * 20))
       .attr('class', 'legend')
-      .attr('id', 'label' + d.name.replace(/\s+/g, ''))
+      .attr('id', 'label-' + this.id + "-" + d.name.replace(/\s+/g, ''))
       .style('fill', function () { return d.color = self.color(d.name); })
       .text(d.name)
       .on('mouseover', function () {
@@ -152,9 +154,9 @@ export class Chart {
   showTooltip(current) {}
 
   setActive(name, value) {
-    d3.select('#label' + name.replace(/\s+/g, ''))
+    d3.select('#label-' + this.id + "-" + name.replace(/\s+/g, ''))
       .classed('active', value);
-    d3.select('#line' + name.replace(/\s+/g, ''))
+    d3.select('#line-' + this.id + "-" + name.replace(/\s+/g, ''))
       .classed('active', value);
   }
 
