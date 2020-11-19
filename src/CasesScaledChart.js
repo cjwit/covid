@@ -3,7 +3,6 @@ import { Chart } from "./Chart.js";
 
 export default class CasesScaledChart extends Chart {
   constructor(id, title, margin) {
-    console.log(id, margin);
     super(id, title, margin);
   }
 

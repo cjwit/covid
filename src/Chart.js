@@ -38,7 +38,6 @@ export class Chart {
   setRanges() {}
 
   createSVG(id, margin) {
-    console.log(id)
     return d3.select('#' + id)
       .append('svg')
       .attr('width', '100%')
