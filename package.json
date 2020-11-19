@@ -7,8 +7,10 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "webpack": "npx webpack",
     "firefox": "open -a Firefox ./dist/index.html",
-    "update": "curl \"https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv\" -o \"/Users/cwituls/Documents/covid/covid.csv\" && python covid.py",
-    "deploy": "git subtree push --prefix dist origin gh-pages"
+    "updateData": "curl \"https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv\" -o \"/Users/cwituls/Documents/covid/covid.csv\" && python covid.py",
+    "deploy": "git subtree push --prefix dist origin gh-pages",
+    "update": "npm run updateData && git commit -am \"auto update\" && npm run deploy"
+
   },
   "repository": {
     "type": "git",
