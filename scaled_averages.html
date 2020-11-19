@@ -4,10 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>COVID-19 statistics by US state: scaled 7-day average - Witulski</title>
-  <link rel="stylesheet" href="src/bootstrap.min.css">
-  <link rel="stylesheet" href="src/styles.css">
-  <script src='src/d3.min.js'></script>
-  <script src='src/script.js'></script>
+  <link rel="stylesheet" href="assets/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/styles.css">
 </head>
 
 <body>
@@ -31,77 +29,7 @@
       </p>
     </div>
 
-    <script>
-      svg = buildChart({ top: 30, right: 50, bottom: 320, left: 20 });
-      chartTitle('Seven day rolling average per 100,000 of population');
-      chartTitle('US average shown as a dotted black line', 1);
-
-      // Set the ranges
-      var x = d3.time.scale().range([0, width]);
-      var y = d3.scale.linear().range([height, 0]);
-
-      // build tooltip
-      var tooltip = d3.select("body")
-        .append("div")
-        .attr("class", "tooltip")
-        .style("opacity", 0);
-
-      var showTooltip = function (current) {
-        tooltip.transition()
-          .duration(100)
-          .style('opacity', .9);
-
-        tooltip.html(function () {
-          return "<b>" + current.name +
-            "</b> max: " + Math.round(current.maxScaledAverages).toLocaleString() +
-            " current: " + Math.round(Number(current.scaledAverages[current.scaledAverages.length - 1])).toLocaleString() +
-            "<br>yesterday's cases: " + Math.round(current.averages[current.averages.length - 1] * 100000.0 / current.population).toLocaleString();
-        })
-          .style('left', (d3.event.pageX - 150) + 'px')
-          .style('top', (d3.event.pageY - 60) + 'px');
-      }
-
-      // Get the data
-      d3.json("data.json", function (error, data) {
-
-        // Dynamically scale the range of the data
-        var dayOne = new Date(2020, 0, 21);
-        var yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
-        x.domain([dayOne, yesterday]);
-        y.domain([0, data.maxScaledAverages]);
-
-        addAxes(x, y);
-
-        // sort data and loop through each state
-        var stateData = Object.entries(data.states).sort(
-          function (a, b) { return a[0] > b[0]; }
-        );
-
-        stateData.forEach(function (d, i) {
-          // get object from iterator array
-          d = d[1];
-
-          // add dates for x values
-          var pairs = [];
-          for (var day = 0; day < data.totalDays; day++) {
-            let currentDay = new Date(dayOne.valueOf() + day * 24 * 60 * 60 * 1000);
-            pairs.push({ "date": currentDay, "y": d.scaledAverages[day] });
-          };
-
-          buildPaths(d, pairs, pathFunctionTime);
-
-          // adjust i for buildLegend after US Average
-          if (d.name < 'US Average') {
-            buildLegend(d, i);
-          }
-          else if (d.name > 'US Average') {
-            buildLegend(d, i - 1);
-          }
-
-        });
-      });
-
-    </script>
+    <div id="chart"></div>
 
     <p>
       This chart tracks the seven day average of cases of COVID-19 across the USA. The data comes from the New York
@@ -120,5 +48,11 @@
       checking to see if I remember how to use D3.js.
     </p>
   </div>
+  <script src='assets/script.js'></script>
+  <script>
+    var margin = { top: 30, right: 50, bottom: 320, left: 20 };
+    var chart = new window.DailyScaledChart(['Seven day rolling average per 100,000 of population', 'US average shown as a dotted black line'], margin);
+  </script>
+
   <script data-goatcounter="https://witulski.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
