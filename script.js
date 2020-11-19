@@ -14,7 +14,6 @@ var buttons = document.getElementsByClassName("btn");
 var charts = document.getElementsByClassName("chart");
 
 var buttonListener = function() {
-  console.log(this.id);
   for (let i = 0; i < buttons.length; i++) {
     buttons[i].classList.remove("btn-default");
     buttons[i].classList.add("btn-primary");
@@ -31,12 +30,5 @@ var buttonListener = function() {
 }
 
 for (let i = 0; i < buttons.length; i++) {
-  console.log(buttons[i]);
   buttons[i].addEventListener("click", buttonListener);
 }
-
-var casesButton = document.getElementById("casesButton");
-var casesScaledButton = document.getElementById("casesScaledButton");
-var deathsButton = document.getElementById("deathsButton");
-var dailyButton = document.getElementById("dailyButton");
-var dailyScaledButton = document.getElementById("dailyScaledButton");
